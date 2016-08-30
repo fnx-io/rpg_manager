@@ -1,0 +1,5 @@
+<p class="padding--small flex--row bg--grey margin--small--bottom" (click)="showInfo()">
+    <span class="flex--grow flex--shrink">{{attribute.name}}</span>
+    <span *ngIf="bonus != null && bonus > 0">+{{bonus}}</span>
+    <span *ngIf="bonus != null && bonus <= 0">{{bonus}}</span>
+</p>

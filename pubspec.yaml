@@ -1,0 +1,31 @@
+name: rpg_manager
+description: A Dart app that uses Angular 2
+version: 0.0.1
+environment:
+  sdk: '>=1.13.0 <2.0.0'
+dependencies:
+  angular2: 2.0.0-beta.19
+  browser: ^0.10.0
+  dart_to_js_script_rewriter: ^1.0.1
+  fnx_config: ^1.0.0
+  cookie: ^0.0.4
+  logging: "^0.11.3"
+  throttle_debounce: "^0.1.2"
+  less_dart: any
+  fnx_ui:
+    git:
+      url: https://github.com/fnx-io/fnx_ui
+      ref: master
+transformers:
+- less_dart:
+    entry_point: web/style.less
+    build_mode: dart
+- angular2:
+    platform_directives:
+    - 'package:angular2/common.dart#COMMON_DIRECTIVES'
+    - 'package:angular2/common.dart#CORE_DIRECTIVES'
+    - 'package:angular2/common.dart#FORM_DIRECTIVES'
+    - 'package:angular2/router.dart#ROUTER_DIRECTIVES'
+    - 'package:fnx_ui/fnx_ui.dart#FNX_UI_COMPONENTS'
+    entry_points: web/main.dart
+- dart_to_js_script_rewriter

@@ -1,0 +1,9 @@
+<fnx-panel-small [closable]="true" #heroPanel>
+    <div header class="flex--row">
+        <h4 class="flex--grow no-margin">{{hero.name}}</h4>
+        <span *ngIf="!heroPanel.open">{{briefAttributes()}}</span>
+    </div>
+    <div>
+        <rpg-attribute *ngFor="let ha of hero.attributes" [attribute]="ha.skill" [bonus]="ha.bonus"></rpg-attribute>
+    </div>
+</fnx-panel-small>

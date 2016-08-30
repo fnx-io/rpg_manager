@@ -1,0 +1,18 @@
+<fnx-app>
+    <div class="layout--header">
+        <header>
+            <nav class="navbar">
+                <h1>RPG manager</h1>
+            </nav>
+            <div class="menu--tabs">
+                <a class="item" [routerLink]="['Home']">Home</a>
+                <a class="item" [routerLink]="['Heroes']">Heroes</a>
+                <a class="item" [routerLink]="['Quests']">Quests</a>
+                <a class="item" [routerLink]="['Items']">Items</a>
+            </div>
+        </header>
+        <main>
+            <router-outlet></router-outlet>
+        </main>
+    </div>
+</fnx-app>
