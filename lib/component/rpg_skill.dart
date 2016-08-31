@@ -6,28 +6,33 @@ import 'package:rpg_manager/model/heroes.dart';
 import 'package:rpg_manager/model/skills.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 import 'package:angular2/core.dart';
+import 'package:rpg_manager/rpg_main.dart';
 
 @Component(
-    selector: 'rpg-attribute', templateUrl: 'rpg_attribute.html',
+    selector: 'rpg-skill', templateUrl: 'rpg_skill.html',
     styles: const [":host { display: block;}"],
     pipes: const [AsBonusPipe]
 )
-class RpgAttribute {
+class RpgSkill {
 
   @Input()
-  BasicAttribute attribute;
+  Skill skill;
 
   @Input()
   Hero hero;
 
-  HeroAttribute get heroAttribute => hero.attributesMap[attribute];
+  HeroSkill get heroSkill => hero == null ? null : hero.skillMap[skill.id];
 
-  FnxApp app;
+  RpgMain app;
 
-  RpgAttribute(this.app);
+  RpgSkill(this.app);
 
   void showInfo() {
-    app.alert("${attribute.name} is a very important attribute");
+    if (hero == null) {
+      app.showSkillDetail(skill);
+    } else {
+      app.showSkillDetail(skill, hero);
+    }
   }
 
 }

@@ -9,9 +9,14 @@ double roll() {
   return (rnd.nextDouble() * DICE + rnd.nextDouble() * DICE + rnd.nextDouble() * DICE) - AVG;
 }
 
-int rollSkill() {
+int rollAttribute() {
   return (rnd.nextDouble()*4).round()-2;
 }
+
+int rollSkill() {
+  return (rnd.nextDouble()*1).round()+1;
+}
+
 
 double rollWithBonus(num bonus) {
   return roll() + bonus;

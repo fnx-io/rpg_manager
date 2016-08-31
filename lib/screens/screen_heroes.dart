@@ -21,7 +21,7 @@ class ScreenHeroes {
   List<Hero> heroesToHire = [];
 
   ScreenHeroes(this.app) {
-    for (int a=0; a<20;a++) {
+    for (int a=0; a<10;a++) {
       heroesToHire.add(generateHero());
     }
   }

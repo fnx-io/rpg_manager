@@ -15,4 +15,38 @@
             <router-outlet></router-outlet>
         </main>
     </div>
+
+    <!-- SKILL DETAIL MODAL -->
+    <fnx-modal *ngIf="skillToShow != null" (close)="closeSkillDetail()">
+        <h3 header>{{skillToShow.name}}</h3>
+        <p header *ngIf="heroToShow != null">... and {{heroToShow.name}}</p>
+
+
+        <p main *ngIf="heroToShow != null && heroToShow.skillMap[skillToShow.id] != null">
+            {{heroToShow.name}} has this skill trained on <strong>level {{heroToShow.skillMap[skillToShow.id].level}}</strong>, which gives
+            him a <strong>bonus {{heroToShow.skillMap[skillToShow.id].bonus | asBonus}}</strong> in appropriate quests.
+        </p>
+
+        <p main *ngIf="heroToShow != null && heroToShow.skillMap[skillToShow.id] == null">
+            {{heroToShow.name}} haven't learned this skill. By default his bonus is {{skillToShow.countBonusForHero(heroToShow).round()}}, based on
+            his attributes and other skills.
+        </p>
+
+        <div main>
+            <h4>Based on</h4>
+            <rpg-skill *ngIf="skillToShow.basedOnSkill != null" [skill]="skillToShow.basedOnSkill" [hero]="heroToShow"></rpg-skill>
+            <rpg-attribute *ngIf="skillToShow.basedOnAttribute != null" [attribute]="skillToShow.basedOnAttribute" [hero]="heroToShow"></rpg-attribute>
+        </div>
+
+        <div main *ngIf="skillToShow.children.isNotEmpty">
+            <h4>Specializations</h4>
+            <rpg-skill *ngFor="let s of skillToShow.children" [skill]="s" [hero]="heroToShow"></rpg-skill>
+        </div>
+
+        <p footer class="buttonbar">
+            <span class="spacer"></span>
+            <button class="btn" (click)="closeSkillDetail()">OK</button>
+        </p>
+    </fnx-modal>
+
 </fnx-app>

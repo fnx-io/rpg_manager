@@ -1,9 +1,17 @@
 <fnx-panel-small [closable]="true" #heroPanel>
     <div header class="flex--row">
         <h4 class="flex--grow no-margin">{{hero.name}}</h4>
-        <span *ngIf="!heroPanel.open">{{briefAttributes()}}</span>
+        <template [ngIf]="!heroPanel.open">
+            <span class="attribute__bonus" *ngFor="let ha of hero.attributes">{{ha.attribute.abbr}} {{ha.bonus | asBonus}}</span>
+        </template>
     </div>
     <div>
-        <rpg-attribute *ngFor="let ha of hero.attributes" [attribute]="ha.skill" [bonus]="ha.bonus"></rpg-attribute>
+        <rpg-attribute *ngFor="let ha of hero.attributes" [attribute]="ha.attribute" [hero]="hero"></rpg-attribute>
     </div>
+
+    <div>
+        <h5>Skills</h5>
+        <rpg-skill *ngFor="let ha of hero.skills" [skill]="ha.skill" [hero]="hero"></rpg-skill>
+    </div>
+
 </fnx-panel-small>

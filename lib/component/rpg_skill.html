@@ -1,0 +1,11 @@
+<p class="padding--small flex--row bg--white--d1 margin--small--bottom" style="cursor: pointer" (click)="showInfo()">
+    <span class="flex--grow flex--shrink">{{skill.name}}</span>
+    <template [ngIf]="heroSkill != null">
+        <span class="padding--right">level {{heroSkill.level}}</span>
+        <span>bonus {{heroSkill.bonus | asBonus}}</span>
+    </template>
+    <template [ngIf]="heroSkill == null && hero != null">
+        not learned, default {{skill.countBonusForHero(hero).round() | asBonus}}
+    </template>
+    <span class="mi">play_arrow</span>
+</p>
