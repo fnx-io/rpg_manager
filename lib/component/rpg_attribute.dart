@@ -6,6 +6,7 @@ import 'package:rpg_manager/model/heroes.dart';
 import 'package:rpg_manager/model/skills.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 import 'package:angular2/core.dart';
+import 'package:rpg_manager/pipes.dart';
 
 @Component(
     selector: 'rpg-attribute', templateUrl: 'rpg_attribute.html',

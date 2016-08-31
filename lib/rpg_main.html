@@ -23,7 +23,8 @@
 
 
         <p main *ngIf="heroToShow != null && heroToShow.skillMap[skillToShow.id] != null">
-            {{heroToShow.name}} has this skill trained on <strong>level {{heroToShow.skillMap[skillToShow.id].level}}</strong>, which gives
+            <strong>{{heroToShow.name}}</strong> has <strong>{{skillToShow.name}}</strong>
+            trained on <strong>level {{heroToShow.skillMap[skillToShow.id].level}}</strong>, which gives
             him a <strong>bonus {{heroToShow.skillMap[skillToShow.id].bonus | asBonus}}</strong> in appropriate quests.
         </p>
 
@@ -32,14 +33,30 @@
             his attributes and other skills.
         </p>
 
+        <div main class="margin--bottom">
+            <h4>Probabilities</h4>
+            <p class="italics">Probabilities of different results depending on a quest difficulty.</p>
+            <fnx-tabs>
+                <fnx-tab *ngFor="let diff of difficulties" title="{{diff.name}}">
+                    <div *ngFor="let res of results" class="item row padding--small">
+                        <div class="s4">{{res.name}}</div>
+                        <div class="s6">
+                            <div class="bg--accent" [style.width.%]="probabilities[diff][res] | asPercent">&nbsp;</div>
+                        </div>
+                        <div class="s2 text--right">{{probabilities[diff][res] | asPercent}} %</div>
+                    </div>
+                </fnx-tab>
+            </fnx-tabs>
+        </div>
+
         <div main>
-            <h4>Based on</h4>
+            <h4>Skill is based on</h4>
             <rpg-skill *ngIf="skillToShow.basedOnSkill != null" [skill]="skillToShow.basedOnSkill" [hero]="heroToShow"></rpg-skill>
             <rpg-attribute *ngIf="skillToShow.basedOnAttribute != null" [attribute]="skillToShow.basedOnAttribute" [hero]="heroToShow"></rpg-attribute>
         </div>
 
         <div main *ngIf="skillToShow.children.isNotEmpty">
-            <h4>Specializations</h4>
+            <h4>Possible specializations</h4>
             <rpg-skill *ngFor="let s of skillToShow.children" [skill]="s" [hero]="heroToShow"></rpg-skill>
         </div>
 

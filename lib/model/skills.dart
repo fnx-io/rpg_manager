@@ -41,6 +41,7 @@ class Skill {
   }
 
   double countBonusForHero(Hero hero) {
+    if (hero == null) return -5.0;
     double bonus = 0.0;
     if (hero.skillMap[id] == null) {
       bonus = -5.0;

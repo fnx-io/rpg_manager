@@ -1,10 +1,13 @@
 import 'package:rpg_manager/model/game.dart' as g;
+import 'package:rpg_manager/model/names.dart';
 import 'package:rpg_manager/model/skills.dart';
 import 'package:angular2/src/facade/lang.dart';
 
 class Hero {
 
   String name;
+  String icon;
+  String color;
 
   List<HeroAttribute> attributes = [];
   Map<BasicAttribute, HeroAttribute> attributesMap = {};
@@ -95,10 +98,72 @@ Hero generateHero() {
     if (attrRoll >= 2) pickRandomSkill(result, a.children, 2.0);
   }
 
-  result.name = "Franta ${(Math.random() * 100).floor()}";
+  result.name = generateName();
+
+  result.icon = g.rndItem(HERO_ICONS);
+  result.color = g.rndItem(HERO_COLORS);
 
   result.recountHeroBonuses();
 
   return result;
 
 }
+
+const HERO_COLORS = const [
+  "#fff",
+  "#e91e63",
+  "#9c27b0",
+  "#2196f3",
+  "#4caf50",
+  "#ffeb3b",
+  "#607d8b"
+];
+
+const HERO_ICONS = const [
+  "all-seeing-eye",
+  "allied-star",
+  "american-shield",
+  "anarchy",
+  "angel-wings",
+  "angry-eyes",
+  "animal-skull",
+  "batwing-emblem",
+  "beams-aura",
+  "beer-bottle",
+  "beer-stein",
+  "bindle",
+  "blindfold",
+  "bone-gnawer",
+  "bordered-shield",
+  "branch-arrow",
+  "brutal-helm",
+  "candle-skull",
+  "cartwheel",
+  "condor-emblem",
+  "condylura-skull",
+  "cowled",
+  "cracked-helm",
+  "crowned-heart",
+  "crowned-skull",
+  "daggers",
+  "death-note",
+  "death-skull",
+  "death-zone",
+  "defibrilate",
+  "delighted",
+  "desert-skull",
+  "diablo-skull",
+  "domino-mask",
+  "double-face-mask",
+  "dread-skull",
+  "duality-mask",
+  "dwarf-face",
+  "eagle-emblem",
+  "elephant-head",
+  "evil-bat",
+  "evil-fork",
+  "eye-shield",
+  "fanged-skull",
+  "farmer",
+  "fire-bowl"
+];

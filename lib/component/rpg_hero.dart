@@ -6,6 +6,7 @@ import 'package:rpg_manager/component/rpg_skill.dart';
 import 'package:rpg_manager/model/heroes.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 import 'package:angular2/core.dart';
+import 'package:rpg_manager/pipes.dart';
 
 @Component(
     selector: 'rpg-hero', templateUrl: 'rpg_hero.html',
@@ -30,9 +31,3 @@ class RpgHero {
 
 }
 
-@Pipe(name: 'asBonus')
-class AsBonusPipe extends PipeTransform {
-
-  String transform(num value) => value < 0 ? "${value}" : "+${value}";
-
-}

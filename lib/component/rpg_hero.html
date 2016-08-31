@@ -4,10 +4,17 @@
         <template [ngIf]="!heroPanel.open">
             <span class="attribute__bonus" *ngFor="let ha of hero.attributes">{{ha.attribute.abbr}} {{ha.bonus | asBonus}}</span>
         </template>
+        <img class="hero__icon--small margin--small--left" src="icons/{{hero.icon}}.svg">
     </div>
-    <div>
-        <rpg-attribute *ngFor="let ha of hero.attributes" [attribute]="ha.attribute" [hero]="hero"></rpg-attribute>
+    <div class="row--gutter">
+        <span class="s3">
+            <img style="fill: #444" src="icons/{{hero.icon}}.svg">
+        </span>
+        <div class="s9">
+            <rpg-attribute *ngFor="let ha of hero.attributes" [attribute]="ha.attribute" [hero]="hero"></rpg-attribute>
+        </div>
     </div>
+
 
     <div>
         <h5>Skills</h5>

@@ -6,6 +6,8 @@ import 'package:rpg_manager/component/rpg_hero.dart';
 import 'package:rpg_manager/component/rpg_skill.dart';
 import 'package:rpg_manager/model/heroes.dart';
 import 'package:rpg_manager/model/skills.dart';
+import 'package:rpg_manager/model/game.dart' as g;
+import 'package:rpg_manager/pipes.dart';
 import 'package:rpg_manager/screens/screen_heroes.dart';
 import 'package:rpg_manager/screens/screen_home.dart';
 import 'package:rpg_manager/screens/screen_items.dart';
@@ -17,7 +19,7 @@ import 'package:angular2/router.dart';
 @Component(
     selector: 'rpg-main', templateUrl: 'rpg_main.html',
     directives: const [RpgAttribute, RpgSkill],
-    pipes: const [AsBonusPipe]
+    pipes: const [AsBonusPipe, AsPercentPipe]
 )
 @RouteConfig(const [
   const Route(path: "/Home", name: "Home", component: ScreenHome, useAsDefault: true),
@@ -30,11 +32,12 @@ class RpgMain implements AfterViewInit {
   @ViewChild(FnxApp)
   FnxApp app;
 
+  Map<g.Difficulty, Map<g.RollResult, double>> probabilities;
+
   RpgMain();
 
   @override
   ngAfterViewInit() {
-    app.toast("Hej!");
   }
 
   Skill skillToShow;
@@ -45,9 +48,14 @@ class RpgMain implements AfterViewInit {
     heroToShow = null;
   }
 
+  List<g.Difficulty> difficulties = g.Difficulty.difficulties;
+  List<g.RollResult> results = g.RollResult.results;
+
   void showSkillDetail(Skill s, [Hero h]) {
     skillToShow = s;
     heroToShow = h;
+    num bonus = s.countBonusForHero(heroToShow);
+    probabilities = g.buildProbabilityOverview(bonus);
   }
 
 }
