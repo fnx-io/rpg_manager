@@ -21,14 +21,18 @@ class RpgAttribute {
   @Input()
   Hero hero;
 
-  HeroAttribute get heroAttribute => hero.attributesMap[attribute];
+  HeroAttribute get heroAttribute => hero == null ? null : hero.attributesMap[attribute];
 
   FnxApp app;
 
   RpgAttribute(this.app);
 
   void showInfo() {
-    app.alert("${attribute.name} is a very important attribute");
+    if (hero == null) {
+      app.alert("${attribute.name} is a very important attribute of your heroes!");
+    } else {
+      app.alert("${hero.name} has a bonus ${heroAttribute.bonus >= 0 ? '+' : ''}${heroAttribute.bonus} on skills based on ${attribute.name}.");
+    }
   }
 
 }

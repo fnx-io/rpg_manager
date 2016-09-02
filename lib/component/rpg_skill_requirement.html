@@ -1,0 +1,8 @@
+<p class="item row bg--white--d1 margin--small--bottom" data-suffix="help" style="cursor: pointer" (click)="showInfo()">
+    <span class="s9">
+        {{skill.name}}
+    </span>
+    <span *ngIf="skillRequirement.singleHero" class="s1 mi">person</span>
+    <span *ngIf="!skillRequirement.singleHero" class="s1 mi">people</span>
+    <span class="s2">{{skillRequirement.difficulty.name}}</span>
+</p>

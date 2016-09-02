@@ -1,0 +1,49 @@
+<!-- SKILL DETAIL MODAL -->
+<fnx-modal  *ngIf="skill != null" (close)="requestClose()">
+    <h3 header>{{skill.name}}</h3>
+    <p header *ngIf="hero != null">... and {{hero.name}}</p>
+
+
+    <p main *ngIf="hero != null && hero.skillMap[skill.id] != null">
+        <strong>{{hero.name}}</strong> has <strong>{{skill.name}}</strong>
+        trained on <strong>level {{hero.skillMap[skill.id].level}}</strong>, which gives
+        him a <strong>bonus {{hero.skillMap[skill.id].bonus | asBonus}}</strong> in appropriate quests.
+    </p>
+
+    <p main *ngIf="hero != null && hero.skillMap[skill.id] == null">
+        {{hero.name}} haven't learned this skill. By default his bonus is {{skill.countBonusForHero(hero).round()}}, based on
+        his attributes and other skills.
+    </p>
+
+    <div main class="margin--bottom">
+        <h4>Probabilities</h4>
+        <p class="italics">Probabilities of different results depending on a quest difficulty.</p>
+        <fnx-tabs>
+            <fnx-tab *ngFor="let diff of difficulties" title="{{diff.name}}">
+                <div *ngFor="let res of results" class="item row padding--small">
+                    <div class="s4">{{res.name}}</div>
+                    <div class="s6">
+                        <div class="bg--accent" [style.width.%]="probabilities[diff][res] | asPercent">&nbsp;</div>
+                    </div>
+                    <div class="s2 text--right">{{probabilities[diff][res] | asPercent}} %</div>
+                </div>
+            </fnx-tab>
+        </fnx-tabs>
+    </div>
+
+    <div main>
+        <h4>Skill is based on</h4>
+        <rpg-skill *ngIf="skill.basedOnSkill != null" [skill]="skill.basedOnSkill" [hero]="hero"></rpg-skill>
+        <rpg-attribute *ngIf="skill.basedOnAttribute != null" [attribute]="skill.basedOnAttribute" [hero]="hero"></rpg-attribute>
+    </div>
+
+    <div main *ngIf="skill.children.isNotEmpty">
+        <h4>Possible specializations</h4>
+        <rpg-skill *ngFor="let s of skill.children" [skill]="s" [hero]="hero"></rpg-skill>
+    </div>
+
+    <p footer class="buttonbar">
+        <span class="spacer"></span>
+        <button class="btn" (click)="requestClose()">OK</button>
+    </p>
+</fnx-modal>

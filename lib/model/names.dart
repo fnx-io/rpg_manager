@@ -1,13 +1,22 @@
-import 'package:rpg_manager/model/game.dart' as g;
+import 'package:rpg_manager/model/dice.dart' as g;
 
 var VOWELS = ["a", "e", "i", "o", "u", "y"];
 var CONSONANTS = ["b", "c", "d", "g", "h", "j", "k", "l", "m", "n", "p", "r", "s", "t", "v", "z" ];
 var CONSONANTS_RARE = ["q", "x", "w", "f"];
 
-var COMMON_ENDING = ["rin", "del", "dil", "son", "oin", "ur", "alf", "boy", "sko", "bot", "bil", "lis"];
+var COMMON_ENDING = ["rin", "del", "dil", "son", "oin", "ur", "alf", "boy", "sko", "bot", "bil", "lis", "rion"];
 
+var PLACE_NAME_END = ["berg", "pond", "way", "burg", "stein", "castle", "hall", "fall", "witch", "creek", "mill", "court", "field", "port", "town", "dor", "cross"];
+var PLACE_NAME_BEGIN = ["Red", "Blue", "Green", "River", "Hollow", "Shadow", "Rose",
+"New", "Bitter", "Nor", "White", "Black", "Old", "Dragon", "Hell", "Fairy", "Elven", "High", "Low"];
 
-String generateName() {
+String generatePlaceName() {
+  String name = "${g.rndItem(PLACE_NAME_BEGIN)}${g.rndItem(PLACE_NAME_END)}";
+  name = name.replaceAll("ww", "w");
+  return name;
+}
+
+String generateHeroName() {
   double prob = 1.2;
   List<String> name = [];
   while (g.rnd.nextDouble() < prob) {
@@ -18,7 +27,7 @@ String generateName() {
     name.add(g.rndItem(COMMON_ENDING));
   }
 
-  if (g.rnd.nextDouble()<0.3) {
+  if (g.rnd.nextDouble()<0.35) {
     name.add(" ");
     double prob = 1.3;
     while (g.rnd.nextDouble() < prob && prob > 0.8) {

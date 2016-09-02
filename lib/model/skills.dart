@@ -66,8 +66,12 @@ void buildSkillsCatalogue() {
   BasicAttribute dexterity = new BasicAttribute("Dexterity", 50, null, "DX");
   SKILL_CATALOGUE.registerAttribute(dexterity);
 
+  BasicAttribute stamina = new BasicAttribute("Stamina", 50, null, "SM");
+  SKILL_CATALOGUE.registerAttribute(stamina);
+
   BasicAttribute intelligence = new BasicAttribute("Intelligence", 50, null, "IN");
   SKILL_CATALOGUE.registerAttribute(intelligence);
+
 
   strength.addSkill(
       new Skill("melee", "Melee weapons", 20, null)..addSkill([
@@ -79,17 +83,29 @@ void buildSkillsCatalogue() {
 
   dexterity.addSkill(
     new Skill("ranged-combat", "Ranged combat", 20, null)..addSkill([
-      new Skill("ranged-combat-hand", "Bows", 20, null),
+      new Skill("ranged-combat-bows", "Bows", 20, null),
       new Skill("ranged-combat-throw", "Throwing", 20, null),
       new Skill("ranged-combat-heavy", "Heavy ranged weapons", 20, null)
     ])
   );
-  dexterity.addSkill(
-      new Skill("martial-arts", "Martial arts", 20, null)
-  );
+  dexterity.addSkill(new Skill("martial-arts", "Martial arts", 20, null));
+
+  stamina.addSkill(new Skill("traveling", "Traveling", 20, null));
+  stamina.addSkill(new Skill("immunity", "Immunity", 20, null));
+  stamina.addSkill(new Skill("pursue", "Pursue", 20, null));
 
   intelligence.addSkill(new Skill("tactics", "Tactics", 20, null));
   intelligence.addSkill(new Skill("navigation", "Navigation", 20, null));
+  intelligence.addSkill(new Skill("tracking", "Tracking", 20, null));
+  intelligence.addSkill(new Skill("negotiation", "Negotiation", 20, null));
+
+  intelligence.addSkill(
+      new Skill("magic", "Magic", 50, null)..addSkill([
+        new Skill("magic-atack", "Attack magic", 50, null),
+        new Skill("magic-defense", "Defense magic", 50, null),
+        new Skill("magic-dark", "Dark magic", 50, null)
+      ])
+  );
 
   SKILL_CATALOGUE.build();
 

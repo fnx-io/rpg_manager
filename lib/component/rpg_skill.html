@@ -1,4 +1,5 @@
-<p class="item flex--row bg--white--d1 margin--small--bottom" data-suffix="play_arrow" style="cursor: pointer" (click)="showInfo()">
+<p class="item flex--row bg--white--d1 margin--small--bottom" data-suffix="play_arrow" style="cursor: pointer"
+   (click)="showDetailModal = true">
     <span class="flex--grow flex--shrink">{{skill.name}}</span>
     <template [ngIf]="heroSkill != null">
         <span class="padding--right">level {{heroSkill.level}}</span>
@@ -8,3 +9,6 @@
         not learned, default {{skill.countBonusForHero(hero).round() | asBonus}}
     </template>
 </p>
+
+<rpg-skill-detail-modal [skill]="skill" [hero]="hero" *ngIf="showDetailModal" (close)="showDetailModal = false"></rpg-skill-detail-modal>
+

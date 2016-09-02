@@ -4,7 +4,8 @@
 import 'package:rpg_manager/component/rpg.dart';
 import 'package:rpg_manager/component/rpg_attribute.dart';
 import 'package:rpg_manager/component/rpg_hero.dart';
-import 'package:rpg_manager/model/game.dart' as g;
+import 'package:rpg_manager/model/dice.dart' as g;
+import 'package:rpg_manager/model/game.dart';
 import 'package:rpg_manager/model/heroes.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 import 'package:angular2/core.dart';
@@ -19,12 +20,8 @@ class ScreenHeroes {
   @ViewChild(FnxApp)
   FnxApp app;
 
-  List<Hero> heroesToHire = [];
+  Game game;
 
-  ScreenHeroes(this.app) {
-    for (int a=0; a<20;a++) {
-      heroesToHire.add(generateHero());
-    }
-  }
+  ScreenHeroes(this.app, this.game);
 
 }

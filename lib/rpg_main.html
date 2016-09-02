@@ -2,68 +2,22 @@
     <div class="layout--header">
         <header>
             <nav class="navbar">
-                <h1>RPG manager</h1>
+                <h1 class="fs-xxl">RPG</h1>
+                <span>manager</span>
+                <span class="spacer"></span>
+                <span>{{game.currentTime | asDate}}</span>
+                <span>{{game.money}}G</span>
             </nav>
             <div class="menu--tabs">
                 <a class="item" [routerLink]="['Home']">Home</a>
                 <a class="item" [routerLink]="['Heroes']">Heroes</a>
                 <a class="item" [routerLink]="['Quests']">Quests</a>
-                <a class="item" [routerLink]="['Items']">Items</a>
+                <!--<a class="item" [routerLink]="['Items']">Items</a>-->
             </div>
         </header>
         <main>
             <router-outlet></router-outlet>
         </main>
     </div>
-
-    <!-- SKILL DETAIL MODAL -->
-    <fnx-modal *ngIf="skillToShow != null" (close)="closeSkillDetail()">
-        <h3 header>{{skillToShow.name}}</h3>
-        <p header *ngIf="heroToShow != null">... and {{heroToShow.name}}</p>
-
-
-        <p main *ngIf="heroToShow != null && heroToShow.skillMap[skillToShow.id] != null">
-            <strong>{{heroToShow.name}}</strong> has <strong>{{skillToShow.name}}</strong>
-            trained on <strong>level {{heroToShow.skillMap[skillToShow.id].level}}</strong>, which gives
-            him a <strong>bonus {{heroToShow.skillMap[skillToShow.id].bonus | asBonus}}</strong> in appropriate quests.
-        </p>
-
-        <p main *ngIf="heroToShow != null && heroToShow.skillMap[skillToShow.id] == null">
-            {{heroToShow.name}} haven't learned this skill. By default his bonus is {{skillToShow.countBonusForHero(heroToShow).round()}}, based on
-            his attributes and other skills.
-        </p>
-
-        <div main class="margin--bottom">
-            <h4>Probabilities</h4>
-            <p class="italics">Probabilities of different results depending on a quest difficulty.</p>
-            <fnx-tabs>
-                <fnx-tab *ngFor="let diff of difficulties" title="{{diff.name}}">
-                    <div *ngFor="let res of results" class="item row padding--small">
-                        <div class="s4">{{res.name}}</div>
-                        <div class="s6">
-                            <div class="bg--accent" [style.width.%]="probabilities[diff][res] | asPercent">&nbsp;</div>
-                        </div>
-                        <div class="s2 text--right">{{probabilities[diff][res] | asPercent}} %</div>
-                    </div>
-                </fnx-tab>
-            </fnx-tabs>
-        </div>
-
-        <div main>
-            <h4>Skill is based on</h4>
-            <rpg-skill *ngIf="skillToShow.basedOnSkill != null" [skill]="skillToShow.basedOnSkill" [hero]="heroToShow"></rpg-skill>
-            <rpg-attribute *ngIf="skillToShow.basedOnAttribute != null" [attribute]="skillToShow.basedOnAttribute" [hero]="heroToShow"></rpg-attribute>
-        </div>
-
-        <div main *ngIf="skillToShow.children.isNotEmpty">
-            <h4>Possible specializations</h4>
-            <rpg-skill *ngFor="let s of skillToShow.children" [skill]="s" [hero]="heroToShow"></rpg-skill>
-        </div>
-
-        <p footer class="buttonbar">
-            <span class="spacer"></span>
-            <button class="btn" (click)="closeSkillDetail()">OK</button>
-        </p>
-    </fnx-modal>
 
 </fnx-app>

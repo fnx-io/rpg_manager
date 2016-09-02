@@ -3,6 +3,7 @@
 
 import 'package:rpg_manager/component/rpg_attribute.dart';
 import 'package:rpg_manager/component/rpg_skill.dart';
+import 'package:rpg_manager/model/game.dart';
 import 'package:rpg_manager/model/heroes.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 import 'package:angular2/core.dart';
@@ -22,12 +23,22 @@ class RpgHero {
   @Input()
   Hero hero;
 
-  RpgHero() {
+  Game game;
+
+  FnxApp app;
+
+  RpgHero(this.game, this.app);
+
+  void hireHero(Hero h) {
+    game.hireHero(h);
+    app.toast('You hired "${hero.name}" for ${hero.dailySalary}G per day');
   }
 
-  String briefAttributes() {
-    return hero.attributes.map((HeroAttribute s) => s.attribute.abbr + (s.bonus >= 0 ? '+' : '') + s.bonus.toString()).join(", ");
+  void fireHero(Hero h) {
+    game.fireHero(h);
+    app.toast('You fired "${hero.name}"');
   }
+
 
 }
 

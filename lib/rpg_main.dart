@@ -4,9 +4,11 @@
 import 'package:rpg_manager/component/rpg_attribute.dart';
 import 'package:rpg_manager/component/rpg_hero.dart';
 import 'package:rpg_manager/component/rpg_skill.dart';
+import 'package:rpg_manager/model/engine.dart';
+import 'package:rpg_manager/model/game.dart';
 import 'package:rpg_manager/model/heroes.dart';
 import 'package:rpg_manager/model/skills.dart';
-import 'package:rpg_manager/model/game.dart' as g;
+import 'package:rpg_manager/model/dice.dart' as g;
 import 'package:rpg_manager/pipes.dart';
 import 'package:rpg_manager/screens/screen_heroes.dart';
 import 'package:rpg_manager/screens/screen_home.dart';
@@ -19,7 +21,7 @@ import 'package:angular2/router.dart';
 @Component(
     selector: 'rpg-main', templateUrl: 'rpg_main.html',
     directives: const [RpgAttribute, RpgSkill],
-    pipes: const [AsBonusPipe, AsPercentPipe]
+    pipes: const [AsBonusPipe, AsPercentPipe, AsDatePipe]
 )
 @RouteConfig(const [
   const Route(path: "/Home", name: "Home", component: ScreenHome, useAsDefault: true),
@@ -32,30 +34,29 @@ class RpgMain implements AfterViewInit {
   @ViewChild(FnxApp)
   FnxApp app;
 
-  Map<g.Difficulty, Map<g.RollResult, double>> probabilities;
+  ApplicationRef appRef;
 
-  RpgMain();
+  Game game;
+
+  RpgMain(this.game, this.appRef) {
+    game.engine.events.listen(engineEventsHandler);
+  }
+
+  void engineEventsHandler(EngineEvent e) {
+    if (e.type == EngineEventType.NEW_HERO) {
+      app.toast("New hero is available: ${e.param.name}");
+    }
+    if (e.type == EngineEventType.NEW_QUEST) {
+      app.toast("New quest is available: ${e.param.name}");
+    }
+    if (e.type == EngineEventType.TICK) {
+       appRef.tick();
+    }
+  }
+
 
   @override
   ngAfterViewInit() {
-  }
-
-  Skill skillToShow;
-  Hero heroToShow;
-
-  void closeSkillDetail() {
-    skillToShow = null;
-    heroToShow = null;
-  }
-
-  List<g.Difficulty> difficulties = g.Difficulty.difficulties;
-  List<g.RollResult> results = g.RollResult.results;
-
-  void showSkillDetail(Skill s, [Hero h]) {
-    skillToShow = s;
-    heroToShow = h;
-    num bonus = s.countBonusForHero(heroToShow);
-    probabilities = g.buildProbabilityOverview(bonus);
   }
 
 }

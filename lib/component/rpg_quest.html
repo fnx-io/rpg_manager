@@ -1,0 +1,50 @@
+<fnx-panel-small [closable]="true" #questPanel>
+    <div header class="flex--row">
+        <h4 class="flex--grow no-margin">{{quest.name}}</h4>
+        <template [ngIf]="!questPanel.open && quest.inProgress">
+            <span>{{progress | asPercent}}%</span>
+        </template>
+        <img class="svg--small margin--small--left" src="icons/{{quest.recipe.icon}}.svg">
+    </div>
+    <p header>
+        <template [ngIf]="!questPanel.open && !quest.inProgress">
+            <span>{{quest.duration}} days, {{quest.overallDifficulty.name}}, {{quest.requiredSkills.length}} skills required</span>
+        </template>
+    </p>
+
+    <h5 *ngIf="quest.inProgress">Quest progress</h5>
+    <div class="flex--row margin--bottom" *ngIf="quest.inProgress">
+        <div class="bg--accent item" [style.width.%]="progress | asPercent">{{progress | asPercent}}%</div>
+    </div>
+
+    <div class="row--gutter">
+        <span class="s3">
+            <img style="fill: #444" src="icons/{{quest.recipe.icon}}.svg">
+        </span>
+        <div class="s5">
+            <p class="item">Difficulty</p>
+            <p class="item">Money</p>
+            <p class="item">Experience</p>
+            <p class="item">Duration</p>
+        </div>
+        <div class="s4">
+            <p class="item">{{quest.overallDifficulty.name}}</p>
+            <p class="item">{{quest.money}}g</p>
+            <p class="item">{{quest.experience}}</p>
+            <p class="item">{{quest.duration}} days</p>
+        </div>
+    </div>
+
+    <div class="row--gutter margin--bottom">
+        <button class="s4 btn" (click)="deleteQuest()">Dismiss</button>
+        <span class="s4"></span>
+        <button class="s4 btn" (click)="attemptQuest()">Attempt</button>
+    </div>
+
+    <div>
+        <h5>Required skills</h5>
+        <rpg-skill-requirement *ngFor="let sr of quest.requiredSkills" [skillRequirement]="sr"></rpg-skill-requirement>
+    </div>
+
+
+</fnx-panel-small>

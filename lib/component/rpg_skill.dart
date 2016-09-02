@@ -2,6 +2,7 @@
 // is governed by a BSD-style license that can be found in the LICENSE file.
 
 import 'package:rpg_manager/component/rpg_hero.dart';
+import 'package:rpg_manager/component/rpg_skill_detail_modal.dart';
 import 'package:rpg_manager/model/heroes.dart';
 import 'package:rpg_manager/model/skills.dart';
 import 'package:fnx_ui/fnx_ui.dart';
@@ -11,6 +12,7 @@ import 'package:rpg_manager/rpg_main.dart';
 
 @Component(
     selector: 'rpg-skill', templateUrl: 'rpg_skill.html',
+    directives: const [RpgSkillDetailModal],
     styles: const [":host { display: block;}"],
     pipes: const [AsBonusPipe]
 )
@@ -26,14 +28,8 @@ class RpgSkill {
 
   RpgMain app;
 
-  RpgSkill(this.app);
+  bool showDetailModal = false;
 
-  void showInfo() {
-    if (hero == null) {
-      app.showSkillDetail(skill);
-    } else {
-      app.showSkillDetail(skill, hero);
-    }
-  }
+  RpgSkill(this.app);
 
 }

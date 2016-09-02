@@ -4,7 +4,7 @@
         <template [ngIf]="!heroPanel.open">
             <span class="attribute__bonus" *ngFor="let ha of hero.attributes">{{ha.attribute.abbr}} {{ha.bonus | asBonus}}</span>
         </template>
-        <img class="hero__icon--small margin--small--left" src="icons/{{hero.icon}}.svg">
+        <img class="svg--small margin--small--left" src="icons/{{hero.icon}}.svg">
     </div>
     <div class="row--gutter">
         <span class="s3">
@@ -15,6 +15,11 @@
         </div>
     </div>
 
+    <div class="row--gutter margin--bottom">
+        <span class="s8"></span>
+        <button *ngIf="!hero.hired" class="s4 btn" (click)="hireHero(hero)" data-prefix="attach_money">Hire</button>
+        <button *ngIf="hero.hired" class="s4 btn" (click)="fireHero(hero)" data-prefix="cancel">Fire</button>
+    </div>
 
     <div>
         <h5>Skills</h5>
