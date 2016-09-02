@@ -1,6 +1,7 @@
 <div class="padding">
 
-    <p class="padding--bottom border--bottom margin--bottom">Today is <strong>{{game.currentTime | asDateLong}}</strong> and you have <strong>{{game.money}}G</strong> in your chest. You have no appointments.</p>
+    <p class="padding--bottom border--bottom margin--bottom">Today is <strong>{{game.currentTime | asDateLong}}</strong>
+        and you have <strong>{{game.money}} G</strong> in your chest. You have no appointments.</p>
 
     <h4>Heroes in your team</h4>
     <rpg-hero class="margin--small--bottom" *ngFor="let hero of game.hiredHeroes" [hero]="hero"></rpg-hero>

@@ -17,29 +17,15 @@
         <div class="bg--accent item" [style.width.%]="progress | asPercent">{{progress | asPercent}}%</div>
     </div>
 
-    <div class="row--gutter">
-        <span class="s3">
-            <img style="fill: #444" src="icons/{{quest.recipe.icon}}.svg">
-        </span>
-        <div class="s5">
-            <p class="item">Difficulty</p>
-            <p class="item">Money</p>
-            <p class="item">Experience</p>
-            <p class="item">Duration</p>
-        </div>
-        <div class="s4">
-            <p class="item">{{quest.overallDifficulty.name}}</p>
-            <p class="item">{{quest.money}}g</p>
-            <p class="item">{{quest.experience}}</p>
-            <p class="item">{{quest.duration}} days</p>
-        </div>
-    </div>
+    <rpg-quest-header [quest]="quest"></rpg-quest-header>
 
-    <div class="row--gutter margin--bottom">
-        <button class="s4 btn" (click)="deleteQuest()">Dismiss</button>
-        <span class="s4"></span>
-        <button class="s4 btn" (click)="attemptQuest()">Attempt</button>
-    </div>
+    <template [ngIf]="!quest.inProgress">
+        <div class="row--gutter margin--bottom">
+            <button class="s5 btn" (click)="deleteQuest()">Dismiss</button>
+            <span class="s2"></span>
+            <button class="s5 btn" (click)="attemptQuest()">Attempt</button>
+        </div>
+    </template>
 
     <div>
         <h5>Required skills</h5>
@@ -48,3 +34,5 @@
 
 
 </fnx-panel-small>
+
+<rpg-quest-attempt-modal *ngIf="showAttemptModal" [quest]="quest" (close)="showAttemptModal = false"></rpg-quest-attempt-modal>

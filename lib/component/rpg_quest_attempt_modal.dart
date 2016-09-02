@@ -3,7 +3,6 @@
 
 import 'package:rpg_manager/component/rpg_attribute.dart';
 import 'package:rpg_manager/component/rpg_hero.dart';
-import 'package:rpg_manager/component/rpg_quest_attempt_modal.dart';
 import 'package:rpg_manager/component/rpg_quest_header.dart';
 import 'package:rpg_manager/component/rpg_skill.dart';
 import 'package:rpg_manager/component/rpg_skill_requirement.dart';
@@ -15,39 +14,36 @@ import 'package:rpg_manager/model/quests.dart';
 import 'package:rpg_manager/pipes.dart';
 
 @Component(
-    selector: 'rpg-quest', templateUrl: 'rpg_quest.html',
+    selector: 'rpg-quest-attempt-modal', templateUrl: 'rpg_quest_attempt_modal.html',
     styles: const [
       ":host { display: block;}",
     ],
-    directives: const [RpgAttribute, RpgSkill, RpgHero, RpgSkillRequirement, RpgQuestHeader, RpgQuestAttemptModal],
+    directives: const [RpgAttribute, RpgSkill, RpgHero, RpgSkillRequirement, RpgQuestHeader],
     pipes: const [AsBonusPipe, AsPercentPipe]
 )
-class RpgQuest {
+class RpgQuestAttemptModal {
 
   @Input()
   Quest quest;
-
-  double get progress => quest.progress(game.currentTime);
 
   Game game;
 
   FnxApp app;
 
-  RpgQuest(this.game, this.app);
+  @Output()
+  EventEmitter<bool> close = new EventEmitter();
 
-  bool showAttemptModal = false;
+  RpgQuestAttemptModal(this.game, this.app);
 
-  void deleteQuest() {
-    game.availableQuests.remove(quest);
+  void attempt() {
+    game.attemptQuest(quest);
+    app.toast("Your heroes left for '${quest.name}'.");
+    close.emit(true);
   }
 
-  void attemptQuest() {
-    showAttemptModal = true;
-    if (game.hiredHeroes.isEmpty) {
-      app.alert("You need to hire some heroes first.");
-    } else {
-      showAttemptModal = true;
-    }
+  void requestClose() {
+    close.emit(true);
   }
 
 }
+

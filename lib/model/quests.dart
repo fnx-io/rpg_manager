@@ -27,6 +27,7 @@ class Quest {
   int money;
   int experience;
   int duration;
+  int minHeroes;
 
   DateTime started;
   DateTime finish;
@@ -66,7 +67,8 @@ Quest generateQuest() {
   q.requiredSkills = buildSkillRequirements(qr.builder(), d);
   q.money = (qr.money * d.rewardCoeficient).round();
   q.experience = (qr.experience * d.rewardCoeficient).round();
-  q.duration = g.distribute(qr.duration, 0.3);
+  q.duration = g.distribute(qr.duration, 0.5);
+  q.minHeroes = g.rnd.nextInt(3)+1;
 
   return q;
 }

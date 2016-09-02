@@ -1,0 +1,14 @@
+<fnx-modal *ngIf="quest != null" (close)="requestClose()">
+    <h3 header>{{quest.name}}</h3>
+
+    <div main>
+        <rpg-quest-header [quest]="quest"></rpg-quest-header>
+    </div>
+
+    <p footer class="buttonbar">
+        <button class="btn" (click)="requestClose()">CANCEL</button>
+        <span class="spacer"></span>
+        <button class="btn bg--theme" data-prefix="directions_run" (click)="attempt()">OK</button>
+    </p>
+
+</fnx-modal>
