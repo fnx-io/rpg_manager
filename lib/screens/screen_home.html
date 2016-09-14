@@ -3,14 +3,14 @@
     <p class="padding--bottom border--bottom margin--bottom">Today is <strong>{{game.currentTime | asDateLong}}</strong>
         and you have <strong>{{game.money}} G</strong> in your chest. You have no appointments.</p>
 
-    <h4>Heroes in your team</h4>
+    <h5>Heroes in your team</h5>
     <rpg-hero class="margin--small--bottom" *ngFor="let hero of game.hiredHeroes" [hero]="hero"></rpg-hero>
 
     <p *ngIf="game.hiredHeroes.isEmpty" class="italics">
         You have no heroes in your team. Hire them on the <a [routerLink]="['Heroes']">heroes screen</a>. Wow, that rhymes!
     </p>
 
-    <h4 class="margin--top">Quests in progress</h4>
+    <h5 class="margin--top">Quests in progress</h5>
 
     <rpg-quest class="margin--small--bottom" *ngFor="let quest of game.questsInProgress" [quest]="quest"></rpg-quest>
 

@@ -8,15 +8,21 @@
                 <span>{{game.currentTime | asDate}}</span>
                 <span>{{game.money}} G</span>
             </nav>
-            <div class="menu--tabs">
+            <div class="menu--tabs" *ngIf="game.loggedUser != null">
                 <a class="item" [routerLink]="['Home']">Home</a>
                 <a class="item" [routerLink]="['Heroes']">Heroes</a>
                 <a class="item" [routerLink]="['Quests']">Quests</a>
-                <!--<a class="item" [routerLink]="['Items']">Items</a>-->
             </div>
         </header>
         <main>
-            <router-outlet></router-outlet>
+            <template [ngIf]="game.loggedUser != null">
+                <router-outlet></router-outlet>
+            </template>
+
+            <template [ngIf]="game.loggedUser == null">
+                <screen-login></screen-login>
+            </template>
+
         </main>
     </div>
 

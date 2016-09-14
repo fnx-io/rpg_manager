@@ -87,9 +87,13 @@ class Difficulty {
     Difficulty.IMPOSSIBLE
   ];
 
+
+  static Difficulty findByName(String name) {
+    return difficulties.firstWhere((Difficulty d) => d.name == name);
+  }
 }
 
-Map<int, double> PROBABILITY_TABLE = null;
+Map<int, double> PROBABILITY_TABLE;
 
 Map<Difficulty,Map<RollResult, double>> buildProbabilityOverview(num bonus) {
   Map<Difficulty,Map<RollResult, double>> result = {};

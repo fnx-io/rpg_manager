@@ -41,7 +41,7 @@ String generateHeroName() {
 }
 
 String generateRandomSegment(List<String> name) {
-  List<String> toChooseFrom = null;
+  List<String> toChooseFrom;
   bool upper = false;
   if (name.length == 0) {
     upper = true;

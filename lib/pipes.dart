@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 @Pipe(name: 'asBonus')
 class AsBonusPipe extends PipeTransform {
 
-  String transform(num value) => value < 0 ? "${value}" : "+${value}";
+  String transform(num value) => value < 0 ? "$value" : "+$value";
 
 }
 

@@ -6,7 +6,7 @@
         </template>
         <img class="svg--small margin--small--left" src="icons/{{quest.recipe.icon}}.svg">
     </div>
-    <p header>
+    <p header >
         <template [ngIf]="!questPanel.open && !quest.inProgress">
             <span>{{quest.duration}} days, {{quest.overallDifficulty.name}}, {{quest.requiredSkills.length}} skills required</span>
         </template>
@@ -30,6 +30,13 @@
     <div>
         <h5>Required skills</h5>
         <rpg-skill-requirement *ngFor="let sr of quest.requiredSkills" [skillRequirement]="sr"></rpg-skill-requirement>
+    </div>
+
+    <div *ngIf="quest.inProgress">
+        <h5 class="margin--top">Assigned heroes</h5>
+        <div>
+            <rpg-hero class="margin--small--bottom" *ngFor="let hero of heroesOnQuest" [hero]="hero"></rpg-hero>
+        </div>
     </div>
 
 

@@ -5,6 +5,18 @@
         <rpg-quest-header [quest]="quest"></rpg-quest-header>
     </div>
 
+    <div main>
+        <h4>Required skills</h4>
+        <rpg-skill-requirement *ngFor="let sr of quest.requiredSkills" [skillRequirement]="sr"></rpg-skill-requirement>
+    </div>
+
+    <div main>
+        <h4>Heroes in your team</h4>
+        <rpg-hero class="margin--small--bottom" *ngFor="let hero of game.hiredHeroes"
+                  [hero]="hero" [quest]="quest"></rpg-hero>
+    </div>
+
+
     <p footer class="buttonbar">
         <button class="btn" (click)="requestClose()">CANCEL</button>
         <span class="spacer"></span>

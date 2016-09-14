@@ -1,0 +1,33 @@
+<div class="padding" *ngIf="game.loggedUser == null">
+
+    <h2>Hi!</h2>
+
+    <p>This is something between technology preview and hobby project. It's a RPG manager - hire heroes, train them, send them to quests.
+    Pure RPG without actual walking! Yay!</p>
+
+    <p>RPG manager was build with:</p>
+
+    <ul class="technologies">
+        <li><a href="https://www.dartlang.org/">Dart</a></li>
+        <li><a href="https://angular.io/docs/dart/latest/index.html">Angular 2</a></li>
+        <li><a href="https://github.com/fnx-io/fnx_ui">fnx_ui</a> - set of pure Dart Angular 2 components for form-heavy desktop applications</li>
+        <li><a href="https://pub.dartlang.org/packages/firebase3">Firebase</a> - unofficial Dart wrapper for Firebase</li>
+        <li><a href="http://game-icons.net/">game-icons.net</a> - enormous set of fantasy SVG icons</li>
+        <li><a href="https://design.google.com/icons/">Material icons</a></li>
+    </ul>
+
+    <p>If you want to continue, please sign-in.<br>Hurry up, the clock is ticking: {{game.currentTime | asDateLong}}</p>
+
+    <div class="row margin--big--top">
+        <span class="s2"></span>
+        <button class="s8 btn bg--theme" (click)="loginWithGoogle()">Google+</button>
+        <span class="s2"></span>
+    </div>
+
+</div>
+<div class="padding" *ngIf="game.loggedUser != null">
+
+    <p class="text--center margin--big"><img src="icons/beams-aura.svg" class="width--50" style="max-width: 10em"></p>
+    <p class="text--center">Great! You are logged in as <strong>{{game.loggedUser.displayName}}</strong>. Now pick something from the menu above.</p>
+
+</div>

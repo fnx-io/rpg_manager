@@ -1,11 +1,19 @@
 <fnx-panel-small [closable]="true" #heroPanel>
     <div header class="flex--row">
         <h4 class="flex--grow no-margin">{{hero.name}}</h4>
-        <template [ngIf]="!heroPanel.open">
+        <template [ngIf]="!heroPanel.open && !questAttempt">
             <span class="attribute__bonus" *ngFor="let ha of hero.attributes">{{ha.attribute.abbr}} {{ha.bonus | asBonus}}</span>
+        </template>
+        <template [ngIf]="questAttempt">
+            <span>{{heroStatus}}</span>
         </template>
         <img class="svg--small margin--small--left" src="icons/{{hero.icon}}.svg">
     </div>
+
+    <fnx-alert *ngIf="hero.onQuest != null" type="info" [closable]="false">
+        Hero is attending "{{hero.onQuest.name}}".
+    </fnx-alert>
+
     <div class="row--gutter">
         <span class="s3">
             <img style="fill: #444" src="icons/{{hero.icon}}.svg">
@@ -15,10 +23,17 @@
         </div>
     </div>
 
-    <div class="row--gutter margin--bottom">
+    <div class="row--gutter margin--bottom" *ngIf="!questAttempt">
         <span class="s7"></span>
-        <button *ngIf="!hero.hired" class="s5 btn" (click)="hireHero(hero)" data-prefix="attach_money">Hire</button>
-        <button *ngIf="hero.hired" class="s5 btn" (click)="fireHero(hero)" data-prefix="cancel">Fire</button>
+        <button *ngIf="!hero.hired" class="s5 btn" (click)="hireHero()" data-prefix="attach_money">Hire</button>
+        <button *ngIf="hero.hired && firePossible" class="s5 btn" (click)="fireHero()" data-prefix="cancel">Fire</button>
+    </div>
+
+    <div class="row--gutter margin--bottom" *ngIf="questAttempt">
+        <button *ngIf="hero.hired && firePossible" class="s5 btn" (click)="fireHero()" data-prefix="cancel">Fire</button>
+        <button *ngIf="removePossible" class="s5 btn" (click)="removeFromQuest()" data-prefix="attach_money">Remove</button>
+        <span class="s2"></span>
+        <button *ngIf="attemptPossible" class="s5 btn" (click)="assignToQuest()" data-prefix="attach_money">Assign</button>
     </div>
 
     <div>

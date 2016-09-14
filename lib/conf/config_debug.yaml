@@ -1,0 +1,5 @@
+firebase:
+  apiKey: "AIzaSyDq6qE03gUeHqWbEl7Y6EsKFiotLxKmjqA"
+  authDomain: "rpg-manager-1af5a.firebaseapp.com"
+  databaseURL: "https://rpg-manager-1af5a.firebaseio.com"
+  storageBucket: "rpg-manager-1af5a.appspot.com"

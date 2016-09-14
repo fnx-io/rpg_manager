@@ -16,6 +16,7 @@ dependencies:
     git:
       url: https://github.com/fnx-io/fnx_ui
       ref: master
+  firebase3: ^0.2.0
 transformers:
 - less_dart:
     entry_point: web/style.less
@@ -28,4 +29,7 @@ transformers:
     - 'package:angular2/router.dart#ROUTER_DIRECTIVES'
     - 'package:fnx_ui/fnx_ui.dart#FNX_UI_COMPONENTS'
     entry_points: web/main.dart
+    resolved_identifiers:
+      Database: 'package:firebase3/firebase.dart'
 - dart_to_js_script_rewriter
+- fnx_config
