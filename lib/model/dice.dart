@@ -48,14 +48,15 @@ RollResult evaluateActionResult(num roll, num bonus) {
 class RollResult {
 
   final String name;
+  final int id;
 
-  static const RollResult FATAL_FAIL = const RollResult._("fatal failure");
-  static const RollResult FAIL = const RollResult._("failure");
-  static const RollResult AVG = const RollResult._("average");
-  static const RollResult SUCCESS = const RollResult._("success");
-  static const RollResult FATAL_SUCCESS = const RollResult._("triumph");
+  static const RollResult FATAL_FAIL = const RollResult._("fatal failure", 0);
+  static const RollResult FAIL = const RollResult._("failure", 1);
+  static const RollResult AVG = const RollResult._("average", 2);
+  static const RollResult SUCCESS = const RollResult._("success", 3);
+  static const RollResult FATAL_SUCCESS = const RollResult._("triumph", 4);
 
-  const RollResult._(this.name);
+  const RollResult._(this.name, this.id);
 
   static const results = const [
     RollResult.FATAL_FAIL,
@@ -64,6 +65,17 @@ class RollResult {
     RollResult.SUCCESS,
     RollResult.FATAL_SUCCESS
   ];
+
+
+  static RollResult findById(int id) {
+    return results.firstWhere((RollResult r) => r.id == id);
+  }
+
+  @override
+  String toString() {
+    return '{$name ($id)}';
+  }
+
 
 }
 

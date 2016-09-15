@@ -12,10 +12,13 @@ class Hero extends Entity {
   String icon;
   String color;
   int dailySalary = 45;
+  int experience = 0;
+  int experienceToSpend = 0;
   Quest onQuest = null;
   bool hired = false;
   List<HeroAttribute> attributes = [];
   List<HeroSkill> skills = [];
+  bool dead = false;
 
   Map<BasicAttribute, HeroAttribute> attributesMap = {};
   Map<String, HeroSkill> skillMap = {};
@@ -37,6 +40,7 @@ class Hero extends Entity {
     for (HeroSkill skill in skills) {
       skill.recountBonus();
     }
+    dailySalary = skills.map((HeroSkill h) => h.level).reduce((int sum, int el) => sum+el);
   }
 
   Map toMap() {
@@ -45,9 +49,12 @@ class Hero extends Entity {
     result["name"] = name;
     result["icon"] = icon;
     result["color"] = color;
+    result["dead"] = dead;
     result["dailySalary"] = dailySalary;
     result["hired"] = hired;
     result["onQuest"] = onQuest?.id;
+    result["experience"] = experience;
+    result["experienceToSpend"] = experienceToSpend;
 
     result["attributes"] = attributes.map((HeroAttribute a) {
       return {
@@ -70,6 +77,9 @@ class Hero extends Entity {
     name = m["name"];
     icon = m["icon"];
     color = m["color"];
+    dead = m["dead"] ?? false;
+    experience = m["experience"] ?? 0;
+    experienceToSpend = m["experienceToSpend"] ?? 0;
     dailySalary = m["dailySalary"];
     hired = m["hired"];
     onQuest = catalogue.questCatalogue.findById(m["onQuest"]);

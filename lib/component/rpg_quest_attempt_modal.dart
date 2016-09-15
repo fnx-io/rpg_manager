@@ -36,10 +36,17 @@ class RpgQuestAttemptModal {
   RpgQuestAttemptModal(this.game, this.app);
 
   void attempt() {
-    game.attemptQuest(quest);
-    app.toast("Your heroes left for '${quest.name}'.");
-    game.save();
-    close.emit(true);
+    print(game.hiredHeroes.where((Hero h) => h.onQuest == quest).toList());
+    int diff = quest.minHeroes - game.hiredHeroes.where((Hero h) => h.onQuest == quest).length;
+    if (diff > 0) {
+      app.alert("Please assign $diff more heroes on this quest.");
+
+    } else {
+      game.attemptQuest(quest);
+      app.toast("Your heroes left for '${quest.name}'.");
+      game.save();
+      close.emit(true);
+    }
   }
 
   void requestClose() {

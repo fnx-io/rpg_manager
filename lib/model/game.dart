@@ -20,6 +20,8 @@ class Game {
 
   User loggedUser;
 
+  List<QuestResult> questResults = [];
+
   Iterable<Hero> get heroesToHire => masterCatalogue.heroesCatalogue.all.where((Hero h) => !h.hired);
 
   Iterable<Hero> get hiredHeroes => masterCatalogue.heroesCatalogue.all.where((Hero h) => h.hired);
@@ -41,10 +43,12 @@ class Game {
   }
 
   void hireHero(Hero h) {
+    assert(!h.dead);
     h.hired = true;
   }
 
   void fireHero(Hero h) {
+    assert(!h.dead);
     h.hired = false;
   }
 

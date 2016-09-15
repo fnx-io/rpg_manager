@@ -57,16 +57,15 @@ class RpgHero {
   }
 
   void assignToQuest() {
-    if (hero.onQuest == null) {
-      hero.onQuest = quest;
-    }
+    assert(!hero.dead);
+    assert(hero.onQuest == null);
+    hero.onQuest = quest;
   }
   void removeFromQuest() {
-    if (hero.onQuest == quest) {
-      hero.onQuest = null;
-    }
+    assert(!hero.dead);
+    assert(hero.onQuest == quest);
+    hero.onQuest = null;
   }
-
 
 }
 

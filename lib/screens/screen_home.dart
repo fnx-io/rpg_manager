@@ -6,11 +6,12 @@ import 'package:fnx_ui/fnx_ui.dart';
 import 'package:rpg_manager/component/rpg_attribute.dart';
 import 'package:rpg_manager/component/rpg_hero.dart';
 import 'package:rpg_manager/component/rpg_quest.dart';
+import 'package:rpg_manager/component/rpg_quest_result.dart';
 import 'package:rpg_manager/model/game.dart';
 import 'package:rpg_manager/pipes.dart';
 
 @Component(selector: 'screen-home', templateUrl: 'screen_home.html',
-    directives: const [RpgHero, RpgAttribute, RpgQuest],
+    directives: const [RpgHero, RpgAttribute, RpgQuest, RpgQuestResult],
     pipes: const [AsDatePipe, AsDateLongPipe]
 )
 class ScreenHome {

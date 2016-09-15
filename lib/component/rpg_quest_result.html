@@ -1,0 +1,14 @@
+<div class="panel padding border margin--bottom">
+    <h5>{{questResult.quest.name}}</h5>
+    <ul>
+        <li *ngFor="let qr of questResult.results">
+            {{qr.hero.name}} attempted {{qr.skillRequirement.difficulty.name}} <span class="italics">{{qr.skillRequirement.skill.name}}</span>
+            with result <strong>"{{qr.result.name}}"</strong>.
+            <span *ngIf="qr.result.id == 0">Hero is <strong>dead</strong>.</span>
+            <span *ngIf="qr.result.id > 0">Hero received <strong>{{qr.experience}} experience</strong>.</span>
+        </li>
+    </ul>
+    <div class="text--right">
+        <a class="btn">OK</a>
+    </div>
+</div>
