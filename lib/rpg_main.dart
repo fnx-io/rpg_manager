@@ -47,10 +47,10 @@ class RpgMain implements AfterViewInit {
 
   void engineEventsHandler(EngineEvent e) {
     if (e.type == EngineEventType.NEW_HERO) {
-      app.toast("New hero is available: ${(e.param as Hero).name}");
+      //app.toast("New hero is available: ${(e.param as Hero).name}");
     }
     if (e.type == EngineEventType.NEW_QUEST) {
-      app.toast("New quest is available: ${(e.param as Quest).name}");
+      //app.toast("New quest is available: ${(e.param as Quest).name}");
     }
     if (e.type == EngineEventType.TICK) {
       // detect changes with each tick, some time-related changes are not detected
