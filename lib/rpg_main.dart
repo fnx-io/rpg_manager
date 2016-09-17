@@ -4,10 +4,11 @@
 import 'package:angular2/core.dart';
 import 'package:angular2/router.dart';
 import 'package:firebase3/firebase.dart';
+import 'package:fnx_profiler/fnx_profiler.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 import 'package:rpg_manager/component/rpg_attribute.dart';
 import 'package:rpg_manager/component/rpg_skill.dart';
-import 'package:rpg_manager/model/engine.dart';
+import 'package:rpg_manager/engine/engine.dart';
 import 'package:rpg_manager/model/game.dart';
 import 'package:rpg_manager/model/heroes.dart';
 import 'package:rpg_manager/model/quests.dart';
@@ -36,12 +37,12 @@ class RpgMain implements AfterViewInit {
 
   ApplicationRef appRef;
 
-  Game game;
+  Engine engine;
+  Game get game => engine.game;
+  Profiler profiler;
 
-  Database database;
-
-  RpgMain(this.game, this.appRef, this.database) {
-    game.engine.events.listen(engineEventsHandler);
+  RpgMain(this.engine, this.appRef, this.profiler) {
+    engine.events.listen(engineEventsHandler);
   }
 
   void engineEventsHandler(EngineEvent e) {
@@ -52,7 +53,13 @@ class RpgMain implements AfterViewInit {
       app.toast("New quest is available: ${(e.param as Quest).name}");
     }
     if (e.type == EngineEventType.TICK) {
-       appRef.tick();
+      // detect changes with each tick, some time-related changes are not detected
+      Profiler child = profiler.openChild("tick");
+      appRef.tick();
+      child.close();
+    }
+    if (e.type == EngineEventType.HERO_LEFT) {
+      app.toast("You didn't have enough money to pay ${(e.param as Hero).name}. Hero left you.");
     }
   }
 

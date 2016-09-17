@@ -6,6 +6,7 @@ import 'package:fnx_ui/fnx_ui.dart';
 import 'package:rpg_manager/component/rpg_attribute.dart';
 import 'package:rpg_manager/component/rpg_hero.dart';
 import 'package:rpg_manager/component/rpg_quest.dart';
+import 'package:rpg_manager/engine/engine.dart';
 import 'package:rpg_manager/model/game.dart';
 
 @Component(selector: 'screen-quests', templateUrl: 'screen_quests.html',
@@ -15,8 +16,9 @@ class ScreenQuests {
   @ViewChild(FnxApp)
   FnxApp app;
 
-  Game game;
+  Engine engine;
+  Game get game => engine.game;
 
-  ScreenQuests(this.app, this.game);
+  ScreenQuests(this.app, this.engine);
 
 }

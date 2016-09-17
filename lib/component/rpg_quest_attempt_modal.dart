@@ -8,6 +8,8 @@ import 'package:rpg_manager/component/rpg_hero.dart';
 import 'package:rpg_manager/component/rpg_quest_header.dart';
 import 'package:rpg_manager/component/rpg_skill.dart';
 import 'package:rpg_manager/component/rpg_skill_requirement.dart';
+import 'package:rpg_manager/engine/engine.dart';
+import 'package:rpg_manager/engine/commands.dart' as command;
 import 'package:rpg_manager/model/game.dart';
 import 'package:rpg_manager/model/heroes.dart';
 import 'package:rpg_manager/model/quests.dart';
@@ -26,31 +28,39 @@ class RpgQuestAttemptModal {
   @Input()
   Quest quest;
 
-  Game game;
+  Engine engine;
+
+  List<Hero> assignedHeroes = [];
 
   FnxApp app;
 
   @Output()
   EventEmitter<bool> close = new EventEmitter();
 
-  RpgQuestAttemptModal(this.game, this.app);
+  RpgQuestAttemptModal(this.engine, this.app);
+
+  void assignHero(Hero h) {
+    if (assignedHeroes.contains(h)) {
+      assignedHeroes.remove(h);
+    } else {
+      assignedHeroes.add(h);
+    }
+  }
 
   void attempt() {
-    print(game.hiredHeroes.where((Hero h) => h.onQuest == quest).toList());
-    int diff = quest.minHeroes - game.hiredHeroes.where((Hero h) => h.onQuest == quest).length;
+    int diff = quest.minHeroes - assignedHeroes.length;
     if (diff > 0) {
       app.alert("Please assign $diff more heroes on this quest.");
 
     } else {
-      game.attemptQuest(quest);
+      engine.executeCommand(new command.AttemptQuest(quest, assignedHeroes));
       app.toast("Your heroes left for '${quest.name}'.");
-      game.save();
       close.emit(true);
     }
   }
 
   void requestClose() {
-    game.hiredHeroes.forEach((Hero h) { if (h.onQuest == quest) h.onQuest = null;} );
+    assignedHeroes = [];
     close.emit(true);
   }
 

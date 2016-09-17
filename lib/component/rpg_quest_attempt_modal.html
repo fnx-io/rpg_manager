@@ -12,8 +12,11 @@
 
     <div main>
         <h4>Heroes in your team</h4>
-        <rpg-hero class="margin--small--bottom" *ngFor="let hero of game.hiredHeroes"
-                  [hero]="hero" [quest]="quest"></rpg-hero>
+        <rpg-hero class="margin--small--bottom"
+                  *ngFor="let hero of engine.game.hiredHeroes"
+                  [hero]="hero" [quest]="quest" [assigned]="assignedHeroes.contains(hero)"
+                  (questAssign)="assignHero(hero)"
+                    ></rpg-hero>
     </div>
 
 

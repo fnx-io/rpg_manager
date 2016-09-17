@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:firebase3/firebase.dart';
-import 'package:rpg_manager/model/engine.dart';
+import 'package:rpg_manager/engine/engine.dart';
+import 'package:rpg_manager/engine/commands.dart' as commands;
 import 'package:rpg_manager/model/heroes.dart';
 import 'package:rpg_manager/model/quests.dart';
 import 'package:rpg_manager/model/skills.dart';
@@ -14,78 +15,29 @@ class Game {
 
   int id = 1;
 
-  Database database;
-
-  DatabaseReference firebase;
+  HeroesCatalogue heroesCatalogue;
+  QuestCatalogue questCatalogue;
+  SkillCatalogue skillCatalogue = new SkillCatalogue();
 
   User loggedUser;
 
   List<QuestResult> questResults = [];
 
-  Iterable<Hero> get heroesToHire => masterCatalogue.heroesCatalogue.all.where((Hero h) => !h.hired);
+  Iterable<Hero> get heroesToHire => heroesCatalogue.all.where((Hero h) => !h.hired);
 
-  Iterable<Hero> get hiredHeroes => masterCatalogue.heroesCatalogue.all.where((Hero h) => h.hired);
+  Iterable<Hero> get hiredHeroes => heroesCatalogue.all.where((Hero h) => h.hired);
 
-  Iterable<Quest> get availableQuests => masterCatalogue.questCatalogue.all.where((Quest q) => !q.inProgress);
+  Iterable<Quest> get availableQuests => questCatalogue.all.where((Quest q) => !q.inProgress);
 
-  Iterable<Quest> get questsInProgress => masterCatalogue.questCatalogue.all.where((Quest q) => q.inProgress);
+  Iterable<Quest> get questsInProgress => questCatalogue.all.where((Quest q) => q.inProgress);
 
   int money = 500;
 
   DateTime currentTime;
 
-  MasterCatalogue masterCatalogue = new MasterCatalogue();
-
-  Engine engine;
-
-  Game(this.database) {
-    engine = new Engine(this);
-  }
-
-  void hireHero(Hero h) {
-    assert(!h.dead);
-    h.hired = true;
-  }
-
-  void fireHero(Hero h) {
-    assert(!h.dead);
-    h.hired = false;
-  }
-
-  void attemptQuest(Quest q) {
-    q.started = currentTime;
-    q.finish = q.started.add(new Duration(days: q.duration));
-  }
-
-  Future initWithUser(User user) async {
-    firebase = database.ref(user.uid).child("game");
-
-    Map data = (await firebase.once("value")).snapshot.val();
-
-    if (data == null) {
-      currentTime = new DateTime(267, 1, 1, 12, 0);
-
-      for (int a = 0; a < 15; a++) {
-        masterCatalogue.questCatalogue.createNew();
-      }
-
-      for (int a = 0; a < 15; a++) {
-        masterCatalogue.heroesCatalogue.createNew();
-      }
-      save();
-    } else {
-      fromMap(data);
-    }
-
-    loggedUser = user;
-
-    engine.start();
-
-    return true;
-  }
-
-  void save() {
-    firebase.set(toMap()).then((_) => print("Game saved ..."));
+  Game() {
+    heroesCatalogue = new HeroesCatalogue(this);
+    questCatalogue = new QuestCatalogue(this);
   }
 
   Map<String, Object> toMap() {
@@ -93,8 +45,8 @@ class Game {
     result["currentTime"] = currentTime.millisecondsSinceEpoch;
     result["money"] = money;
 
-    result["heroes"] = masterCatalogue.heroesCatalogue.all.map((Hero h) => h.toMap()).toList();
-    result["quests"] = masterCatalogue.questCatalogue.all.map((Quest q) => q.toMap()).toList();
+    result["heroes"] = heroesCatalogue.all.map((Hero h) => h.toMap()).toList();
+    result["quests"] = questCatalogue.all.map((Quest q) => q.toMap()).toList();
 
     return result;
   }
@@ -105,30 +57,16 @@ class Game {
 
     (data["quests"] as List).forEach((Map m) {
       Quest q = new Quest();
-      q.fromMap(m, masterCatalogue);
-      masterCatalogue.questCatalogue.register(q);
+      q.fromMap(m, this);
+      questCatalogue.registerExisting(q);
     });
 
     (data["heroes"] as List).forEach((Map m) {
       Hero h = new Hero();
-      h.fromMap(m, masterCatalogue);
-      masterCatalogue.heroesCatalogue.register(h);
+      h.fromMap(m, this);
+      heroesCatalogue.registerExisting(h);
     });
 
   }
-
-}
-
-class MasterCatalogue {
-
-  HeroesCatalogue heroesCatalogue;
-  QuestCatalogue questCatalogue;
-  SkillCatalogue skillCatalogue = new SkillCatalogue();
-
-  MasterCatalogue() {
-    heroesCatalogue = new HeroesCatalogue(this);
-    questCatalogue = new QuestCatalogue(this);
-  }
-
 
 }

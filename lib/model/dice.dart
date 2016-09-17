@@ -86,9 +86,9 @@ class Difficulty {
   final double rewardCoeficient;
 
   static const Difficulty AVG = const Difficulty._(0, "average", 1.0);
-  static const Difficulty HARD = const Difficulty._(-5, "hard", 1.5);
-  static const Difficulty VERY_HARD = const Difficulty._(-10, "very hard", 2.0);
-  static const Difficulty IMPOSSIBLE = const Difficulty._(-15, "impossible", 3.0);
+  static const Difficulty HARD = const Difficulty._(-5, "hard", 1.2);
+  static const Difficulty VERY_HARD = const Difficulty._(-10, "very hard", 1.5);
+  static const Difficulty IMPOSSIBLE = const Difficulty._(-15, "impossible", 2.0);
 
   const Difficulty._(this.bonus, this.name, this.rewardCoeficient);
 

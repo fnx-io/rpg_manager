@@ -8,7 +8,8 @@
             <span *ngIf="qr.result.id > 0">Hero received <strong>{{qr.experience}} experience</strong>.</span>
         </li>
     </ul>
+    <p>You received <strong>{{questResult.money}}G</strong>. Overall quest result is <strong>{{questResult.overallResult.name}}</strong>.</p>
     <div class="text--right">
-        <a class="btn">OK</a>
+        <a class="btn" (click)="closeResult()">OK</a>
     </div>
 </div>

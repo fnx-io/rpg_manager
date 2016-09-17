@@ -7,7 +7,8 @@ dependencies:
   angular2: 2.0.0-beta.19
   browser: ^0.10.0
   dart_to_js_script_rewriter: ^1.0.1
-  fnx_config: ^1.0.0
+  fnx_config: any
+  fnx_profiler: any
   cookie: ^0.0.4
   logging: "^0.11.3"
   throttle_debounce: "^0.1.2"
@@ -25,11 +26,12 @@ transformers:
     platform_directives:
     - 'package:angular2/common.dart#COMMON_DIRECTIVES'
     - 'package:angular2/common.dart#CORE_DIRECTIVES'
-    - 'package:angular2/common.dart#FORM_DIRECTIVES'
     - 'package:angular2/router.dart#ROUTER_DIRECTIVES'
     - 'package:fnx_ui/fnx_ui.dart#FNX_UI_COMPONENTS'
     entry_points: web/main.dart
     resolved_identifiers:
       Database: 'package:firebase3/firebase.dart'
+      Auth: 'package:firebase3/firebase.dart'
+      Profiler: 'package:fnx_profiler/fnx_profiler.dart'
 - dart_to_js_script_rewriter
 - fnx_config

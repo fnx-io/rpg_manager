@@ -5,6 +5,7 @@ import 'package:angular2/core.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 import 'package:rpg_manager/component/rpg_attribute.dart';
 import 'package:rpg_manager/component/rpg_hero.dart';
+import 'package:rpg_manager/engine/engine.dart';
 import 'package:rpg_manager/model/game.dart';
 
 @Component(
@@ -17,8 +18,9 @@ class ScreenHeroes {
   @ViewChild(FnxApp)
   FnxApp app;
 
-  Game game;
+  Engine engine;
+  Game get game => engine.game;
 
-  ScreenHeroes(this.app, this.game);
+  ScreenHeroes(this.app, this.engine);
 
 }

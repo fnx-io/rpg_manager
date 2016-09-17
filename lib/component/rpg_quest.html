@@ -6,11 +6,14 @@
         </template>
         <img class="svg--small margin--small--left" src="icons/{{quest.recipe.icon}}.svg">
     </div>
-    <p header >
+    <div header>
         <template [ngIf]="!questPanel.open && !quest.inProgress">
-            <span>{{quest.duration}} days, {{quest.overallDifficulty.name}}, {{quest.requiredSkills.length}} skills required</span>
+            <p>
+                {{quest.duration}} days, {{quest.overallDifficulty.name}}, {{quest.minHeroes}} heroes<br>
+                {{skills}}
+            </p>
         </template>
-    </p>
+    </div>
 
     <h5 *ngIf="quest.inProgress">Quest progress</h5>
     <div class="flex--row margin--bottom" *ngIf="quest.inProgress">

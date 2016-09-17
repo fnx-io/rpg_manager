@@ -7,6 +7,7 @@ import 'package:rpg_manager/component/rpg_attribute.dart';
 import 'package:rpg_manager/component/rpg_hero.dart';
 import 'package:rpg_manager/component/rpg_quest.dart';
 import 'package:rpg_manager/component/rpg_quest_result.dart';
+import 'package:rpg_manager/engine/engine.dart';
 import 'package:rpg_manager/model/game.dart';
 import 'package:rpg_manager/pipes.dart';
 
@@ -19,8 +20,9 @@ class ScreenHome {
   @ViewChild(FnxApp)
   FnxApp app;
 
-  Game game;
+  Engine engine;
+  Game get game => engine.game;
 
-  ScreenHome(this.app, this.game);
+  ScreenHome(this.app, this.engine);
 
 }

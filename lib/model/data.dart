@@ -6,19 +6,10 @@ abstract class Catalogue<T extends Entity> {
 
   Map<int, T> _repo = {};
 
-  T createNew() {
-    T result = createNewImpl();
-    result.id = _generateId();
-    register(result);
-    return result;
-  }
-
   T findById(int id) {
     if (id == null) return null;
     return _repo[id];
   }
-
-  T createNewImpl();
 
   Iterable<T> get all => _repo.values;
 
@@ -26,11 +17,16 @@ abstract class Catalogue<T extends Entity> {
     _repo.remove(t.id);
   }
 
-  void register(T t) {
+  void registerExisting(T t) {
     if (t.id == null) throw "Null id";
     _repo[t.id] = t;
   }
 
+  void registerNew(T t) {
+    if (t.id != null) throw "Id not null!";
+    t.id = _generateId();
+    _repo[t.id] = t;
+  }
 
 }
 

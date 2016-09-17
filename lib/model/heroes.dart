@@ -2,7 +2,7 @@ import 'package:angular2/src/facade/lang.dart';
 import 'package:rpg_manager/model/data.dart';
 import 'package:rpg_manager/model/dice.dart' as g;
 import 'package:rpg_manager/model/game.dart';
-import 'package:rpg_manager/model/names.dart';
+import 'package:rpg_manager/engine/names.dart';
 import 'package:rpg_manager/model/quests.dart';
 import 'package:rpg_manager/model/skills.dart';
 
@@ -72,7 +72,7 @@ class Hero extends Entity {
     return result;
   }
 
-  void fromMap(Map m, MasterCatalogue catalogue) {
+  void fromMap(Map m, Game catalogue) {
     id = m["id"];
     name = m["name"];
     icon = m["icon"];
@@ -89,7 +89,7 @@ class Hero extends Entity {
     });
 
     (m["skills"] as List).forEach((Map m) {
-      addSkill(catalogue.skillCatalogue.skillsMap[m["skill"]], m["level"]);
+      addSkill(catalogue.skillCatalogue.findSkillById(m["skill"]), m["level"]);
     });
 
     recountHeroBonuses();
@@ -190,54 +190,8 @@ const HERO_ICONS = const [
 
 class HeroesCatalogue extends Catalogue<Hero> {
 
-  MasterCatalogue masterCatalogue;
+  Game masterCatalogue;
 
   HeroesCatalogue(this.masterCatalogue);
 
-  void pickRandomSkill(Hero result, List<Skill> from, double trashold) {
-    if (trashold < 0.1) return;
-    if (from == null || from.isEmpty) return;
-    if (result.skills.length >= 3) return;
-    var prob = trashold / from.length;
-    for (var skill in from) {
-      if (g.rnd.nextDouble() < prob) {
-        result.addSkill(skill, g.rollSkill());
-        pickRandomSkill(result, skill.children, trashold / 2);
-      }
-    }
-  }
-
-  @override
-  Hero createNewImpl() {
-    Hero result = new Hero();
-
-    SkillCatalogue sc = masterCatalogue.skillCatalogue;
-
-    BasicAttribute willBeGreatIn = sc.attributes[g.rnd.nextInt(sc.attributes.length)];
-
-    for (var a in sc.attributes) {
-      int attrRoll = 0;
-      if (a == willBeGreatIn) {
-        attrRoll = 3;
-      } else {
-        attrRoll = g.rollAttribute();
-      }
-      result.addAttribute(a, attrRoll);
-      if (attrRoll == 1) pickRandomSkill(result, a.children, 1.0);
-      if (attrRoll == 2) pickRandomSkill(result, a.children, 1.5);
-      if (attrRoll >= 3) pickRandomSkill(result, a.children, 2.0);
-    }
-
-    result.name = generateHeroName();
-
-    result.icon = g.rndItem(HERO_ICONS);
-    result.color = g.rndItem(HERO_COLORS);
-
-    result.recountHeroBonuses();
-
-    return result;
-  }
-
 }
-
-

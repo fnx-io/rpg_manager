@@ -60,7 +60,7 @@ class Skill {
 class SkillCatalogue {
 
   List<Skill> skills = [];
-  Map<String, Skill> skillsMap = {};
+  Map<String, Skill> _skillsMap = {};
 
   Map<String, BasicAttribute> attributesMap = {};
   List<BasicAttribute> attributes = [];
@@ -107,7 +107,7 @@ class SkillCatalogue {
 
     intelligence.addSkill(
         new Skill("magic", "Magic", 50, null)..addSkill([
-          new Skill("magic-atack", "Attack magic", 50, null),
+          new Skill("magic-attack", "Attack magic", 50, null),
           new Skill("magic-defense", "Defense magic", 50, null),
           new Skill("magic-dark", "Dark magic", 50, null)
         ])
@@ -117,12 +117,18 @@ class SkillCatalogue {
   }
 
   void registerSkill(Skill s) {
-    if (skillsMap.containsKey(s.id)) throw "There already is an attribute with id=${s.id}";
-    skillsMap[s.id] = s;
+    if (_skillsMap.containsKey(s.id)) throw "There already is an attribute with id=${s.id}";
+    _skillsMap[s.id] = s;
     skills.add(s);
     for (var ch in s.children) {
       registerSkill(ch);
     }
+  }
+
+  Skill findSkillById(String id) {
+    Skill skill = _skillsMap[id];
+    if (skill == null) throw "No such skill: $id";
+    return skill;
   }
 
   void registerAttribute(BasicAttribute a) {

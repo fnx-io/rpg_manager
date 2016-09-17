@@ -1,4 +1,4 @@
-<div class="padding" *ngIf="game.loggedUser == null">
+<div class="padding">
 
     <h2>Hi!</h2>
 
@@ -16,7 +16,7 @@
         <li><a href="https://design.google.com/icons/">Material icons</a></li>
     </ul>
 
-    <p>If you want to continue, please sign-in.<br>Hurry up, the clock is ticking: {{game.currentTime | asDateLong}}</p>
+    <p class="text--center">If you want to continue, please sign-in.</p>
 
     <div class="row margin--big--top">
         <span class="s2"></span>
@@ -24,10 +24,6 @@
         <span class="s2"></span>
     </div>
 
-</div>
-<div class="padding" *ngIf="game.loggedUser != null">
-
     <p class="text--center margin--big"><img src="icons/beams-aura.svg" class="width--50" style="max-width: 10em"></p>
-    <p class="text--center">Great! You are logged in as <strong>{{game.loggedUser.displayName}}</strong>. Now pick something from the menu above.</p>
 
 </div>

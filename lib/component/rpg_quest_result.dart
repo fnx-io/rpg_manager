@@ -9,7 +9,8 @@ import 'package:rpg_manager/component/rpg_quest_attempt_modal.dart';
 import 'package:rpg_manager/component/rpg_quest_header.dart';
 import 'package:rpg_manager/component/rpg_skill.dart';
 import 'package:rpg_manager/component/rpg_skill_requirement.dart';
-import 'package:rpg_manager/model/engine.dart';
+import 'package:rpg_manager/engine/engine.dart';
+import 'package:rpg_manager/engine/commands.dart' as command;
 import 'package:rpg_manager/model/game.dart';
 import 'package:rpg_manager/model/heroes.dart';
 import 'package:rpg_manager/model/quests.dart';
@@ -28,15 +29,15 @@ class RpgQuestResult {
   @Input()
   QuestResult questResult;
 
-  Game game;
+  Engine engine;
 
   FnxApp app;
 
-  RpgQuestResult(this.game, this.app);
+  RpgQuestResult(this.engine, this.app);
 
   void closeResult() {
-    game.masterCatalogue.questCatalogue.remove(questResult.quest);
-    game.questResults.remove(questResult);
+    engine.executeCommand(new command.DeleteQuest(questResult.quest));
+    engine.game.questResults.remove(questResult);
   }
 
 }

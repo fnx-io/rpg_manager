@@ -1,7 +1,9 @@
 import 'package:rpg_manager/model/data.dart';
 import 'package:rpg_manager/model/dice.dart' as g;
+import 'package:rpg_manager/engine/engine.dart';
 import 'package:rpg_manager/model/game.dart';
-import 'package:rpg_manager/model/names.dart';
+import 'package:rpg_manager/engine/names.dart';
+import 'package:rpg_manager/model/heroes.dart';
 import 'package:rpg_manager/model/skills.dart';
 
 typedef List<Skill> RequestedSkillsBuilder();
@@ -19,6 +21,25 @@ class QuestRecipe {
 
 }
 
+
+class HeroSkillAttemptResult {
+
+  Hero hero;
+  SkillRequirement skillRequirement;
+  g.RollResult result;
+  int experience = 0;
+
+}
+
+class QuestResult {
+
+  Quest quest;
+  g.RollResult overallResult;
+  int money = 0;
+  List<HeroSkillAttemptResult> results = [];
+
+}
+
 class Quest extends Entity {
 
   String name;
@@ -33,6 +54,8 @@ class Quest extends Entity {
 
   DateTime started;
   DateTime finish;
+
+  QuestResult result;
 
   bool get inProgress => started != null;
 
@@ -70,7 +93,7 @@ class Quest extends Entity {
     return result;
   }
 
-  void fromMap(Map m, MasterCatalogue masterCatalogue) {
+  void fromMap(Map m, Game masterCatalogue) {
     id = m["id"];
     name = m["name"];
     overallDifficulty = g.Difficulty.findByName(m["overallDifficulty"]);
@@ -91,7 +114,7 @@ class Quest extends Entity {
         SkillRequirement sk = new SkillRequirement();
         sk.difficulty = g.Difficulty.findByName(s["difficulty"]);
         sk.singleHero = s["singleHero"];
-        sk.skill = masterCatalogue.skillCatalogue.skillsMap[s["skill"]];
+        sk.skill = masterCatalogue.skillCatalogue.findSkillById(s["skill"]);
         requiredSkills.add(sk);
       });
     }
@@ -110,14 +133,14 @@ class SkillRequirement {
 class QuestCatalogue extends Catalogue<Quest> {
 
   List<QuestRecipe> questRecipes = [];
-  MasterCatalogue masterCatalogue;
+  Game game;
 
-  QuestCatalogue(this.masterCatalogue) {
+  QuestCatalogue(this.game) {
     questRecipes.add(new QuestRecipe()
       ..id = 1
       ..name = "Tresure hunt"
       ..icon = "treasure-map"
-      ..money = 500
+      ..money = 200
       ..experience = 50
       ..duration = 5
       ..builder = () {
@@ -136,7 +159,7 @@ class QuestCatalogue extends Catalogue<Quest> {
         return merge(
             allOf(["melee-heavy", "ranged-combat-heavy"]),
             oneOf(["tactics", "tracking"]),
-            oneOf(["magic-atack", "magic-defense"])
+            oneOf(["magic-attack", "magic-defense"])
         );
       }
     );
@@ -145,9 +168,9 @@ class QuestCatalogue extends Catalogue<Quest> {
       ..id = 3
       ..name = "Search and rescue"
       ..icon = "torch"
-      ..money = 500
+      ..money = 100
       ..experience = 50
-      ..duration = 5
+      ..duration = 2
       ..builder = () {
         return merge(allOf(["tracking", "pursue"]), oneOfChildren(["melee", "negotiation"]));
       }
@@ -157,26 +180,11 @@ class QuestCatalogue extends Catalogue<Quest> {
       ..id = 4
       ..name = "Damsel in distress"
       ..icon = "heart-tower"
-      ..money = 500
+      ..money = 100
       ..experience = 50
-      ..duration = 5
+      ..duration = 3
       ..builder = () {
         return merge(allOf(["negotiation", "tactics", "martial-arts"]));
-      }
-    );
-
-    questRecipes.add(new QuestRecipe()
-      ..id = 5
-      ..name = "Competition"
-      ..icon = "target-arrows"
-      ..money = 500
-      ..experience = 50
-      ..duration = 5
-      ..builder = () {
-        return merge(
-            oneOf(["ranged-combat-bows", "ranged-combat-throw", "melee-sword", "magic"]),
-            maybe(oneOf(["tactics", "negotiation"]))
-        );
       }
     );
 
@@ -184,9 +192,9 @@ class QuestCatalogue extends Catalogue<Quest> {
       ..id = 6
       ..name = "Tournament"
       ..icon = "sword-clash"
-      ..money = 500
-      ..experience = 50
-      ..duration = 5
+      ..money = 100
+      ..experience = 100
+      ..duration = 3
       ..builder = () {
         return merge(
             oneOf(["ranged-combat-bows", "martial-arts", "melee-heavy"]),
@@ -200,9 +208,15 @@ class QuestCatalogue extends Catalogue<Quest> {
       ..name = "Dark lord"
       ..icon = "overlord-helm"
       ..money = 500
-      ..experience = 50
-      ..duration = 5
-      ..builder = () {}
+      ..experience = 250
+      ..duration = 6
+      ..builder = () {
+        return merge(
+            oneOf(["tactics", "negotiation"]),
+            oneOf(["ranged-combat-bows", "martial-arts", "melee-heavy"]),
+            oneOf(["magic-dark","magic-attack", "magic-defense"])
+        );
+      }
     );
 
     questRecipes.add(new QuestRecipe()
@@ -211,20 +225,28 @@ class QuestCatalogue extends Catalogue<Quest> {
       ..icon = "shield"
       ..money = 500
       ..experience = 50
-      ..duration = 5
-      ..builder = () {}
+      ..duration = 10
+      ..builder = () {
+        return merge(allOf(["traveling", "melee-knife", "martial-arts"]));
+      }
     );
 
     questRecipes.add(new QuestRecipe()
       ..id = 9
       ..name = "Werewolfs"
       ..icon = "wolf-howl"
-      ..money = 500
-      ..experience = 50
+      ..money = 200
+      ..experience = 100
       ..duration = 5
-      ..builder = () {}
+      ..builder = () {return merge(
+          oneOf(["immunity","tracking","pursue"]),
+          allOf(["magic"]),
+          oneOf(["ranged-combat-bows","melee-sword"])
+        );
+      }
     );
 
+    /*
     questRecipes.add(new QuestRecipe()
       ..id = 10
       ..name = "Lair"
@@ -304,30 +326,11 @@ class QuestCatalogue extends Catalogue<Quest> {
       ..duration = 5
       ..builder = () {}
     );
+    */
   }
 
   QuestRecipe findQuestRecipeById(int id) {
     return questRecipes.firstWhere((QuestRecipe qr) => qr.id == id);
-  }
-
-  List<SkillRequirement> generateSkillRequirements(List<Skill> built, g.Difficulty d) {
-    if (built == null) return [];
-    return built.map((Skill s) {
-      SkillRequirement res = new SkillRequirement()..skill = s;
-      int diffIndex = g.Difficulty.difficulties.indexOf(d);
-      if (diffIndex == 0) {
-        res.difficulty = d;
-      } else {
-        if (g.rnd.nextDouble() < 0.6) {
-          res.difficulty = d;
-        } else {
-          res.difficulty = g.Difficulty.difficulties[diffIndex-1];
-        }
-      }
-      res.singleHero = (g.rnd.nextDouble() < 0.6);
-      return res;
-
-    }).toList() as List<SkillRequirement>;
   }
 
   List<Skill> maybe(List<Skill> list) {
@@ -339,21 +342,21 @@ class QuestCatalogue extends Catalogue<Quest> {
   }
 
   List<Skill> allOf(List<String> list) {
-    return list.map((String id) => masterCatalogue.skillCatalogue.skillsMap[id]).toList() as List<Skill>;
+    return list.map((String id) => game.skillCatalogue.findSkillById(id)).toList();
   }
 
   List<Skill> oneOfChildren(List<String> list) {
     List<Skill> candidates = [];
     for (var id in list) {
-      candidates.add(masterCatalogue.skillCatalogue.skillsMap[id]);
-      candidates.addAll(masterCatalogue.skillCatalogue.skillsMap[id].children);
+      candidates.add(game.skillCatalogue.findSkillById(id));
+      candidates.addAll(game.skillCatalogue.findSkillById(id).children);
     }
     return [g.rndItem(candidates)];
   }
 
   List<Skill> oneOf(List<String> list) {
     String one = g.rndItem(list);
-    return [masterCatalogue.skillCatalogue.skillsMap[one]];
+    return [game.skillCatalogue.findSkillById(one)];
   }
 
   List<Skill> merge(List<Skill> a, [List<Skill> b, List<Skill> c, List<Skill> d]) {
@@ -363,24 +366,6 @@ class QuestCatalogue extends Catalogue<Quest> {
     if (c != null) a.addAll(c);
     if (d != null) a.addAll(d);
     return a;
-  }
-
-  @override
-  Quest createNewImpl() {
-    QuestRecipe qr = g.rndItem(questRecipes);
-    g.Difficulty d = g.rndItem(g.Difficulty.difficulties);
-
-    Quest q = new Quest();
-    q.overallDifficulty = d;
-    q.recipe = qr;
-    q.name = qr.name + " at " + generatePlaceName();
-    q.requiredSkills = generateSkillRequirements(qr.builder(), d);
-    q.money = (qr.money * d.rewardCoeficient).round();
-    q.experience = (qr.experience * d.rewardCoeficient).round();
-    q.duration = g.distribute(qr.duration, 0.5);
-    q.minHeroes = g.rnd.nextInt(3)+1;
-
-    return q;
   }
 
 }

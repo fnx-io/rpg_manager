@@ -5,6 +5,8 @@ import 'package:angular2/core.dart';
 import 'package:fnx_ui/fnx_ui.dart';
 import 'package:rpg_manager/component/rpg_attribute.dart';
 import 'package:rpg_manager/component/rpg_skill.dart';
+import 'package:rpg_manager/engine/engine.dart';
+import 'package:rpg_manager/engine/commands.dart' as command;
 import 'package:rpg_manager/model/game.dart';
 import 'package:rpg_manager/model/heroes.dart';
 import 'package:rpg_manager/model/quests.dart';
@@ -27,10 +29,17 @@ class RpgHero {
   @Input()
   Quest quest;
 
-  bool get firePossible => hero.onQuest == null;
+  @Input()
+  bool assigned = false;
+
+  @Output()
+  EventEmitter<Hero> questAssign = new EventEmitter();
+
+  bool get firePossible => hero.onQuest == null && !assigned;
   bool get questAttempt => quest != null;
-  bool get attemptPossible => questAttempt && hero.onQuest == null;
-  bool get removePossible => questAttempt && hero.onQuest == quest;
+  bool get attemptPossible => questAttempt && hero.onQuest == null && !assigned;
+  bool get removePossible => questAttempt && assigned;
+
 
   String get heroStatus {
     if (hero.onQuest == quest) return "assigned";
@@ -38,33 +47,24 @@ class RpgHero {
     return "available";
   }
 
-  Game game;
+  Engine engine;
 
   FnxApp app;
 
-  RpgHero(this.game, this.app);
+  RpgHero(this.engine, this.app);
 
   void hireHero() {
-    game.hireHero(hero);
+    engine.executeCommand(new command.HireHero(hero));
     app.toast('You hired "${hero.name}" for ${hero.dailySalary}G per day');
-    game.save();
   }
 
   void fireHero() {
-    game.fireHero(hero);
+    engine.executeCommand(new command.FireHero(hero));
     app.toast('You fired "${hero.name}"');
-    game.save();
   }
 
-  void assignToQuest() {
-    assert(!hero.dead);
-    assert(hero.onQuest == null);
-    hero.onQuest = quest;
-  }
-  void removeFromQuest() {
-    assert(!hero.dead);
-    assert(hero.onQuest == quest);
-    hero.onQuest = null;
+  void fireQuestAssign() {
+    questAssign.emit(hero);
   }
 
 }

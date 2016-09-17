@@ -37,9 +37,9 @@
 
     <div class="row--gutter margin--bottom" *ngIf="questAttempt">
         <button *ngIf="hero.hired && firePossible" class="s5 btn" (click)="fireHero()" data-prefix="cancel">Fire</button>
-        <button *ngIf="removePossible" class="s5 btn" (click)="removeFromQuest()" data-prefix="attach_money">Remove</button>
+        <button *ngIf="removePossible" class="s5 btn" (click)="fireQuestAssign()" data-prefix="attach_money">Remove</button>
         <span class="s2"></span>
-        <button *ngIf="attemptPossible" class="s5 btn" (click)="assignToQuest()" data-prefix="attach_money">Assign</button>
+        <button *ngIf="attemptPossible" class="s5 btn" (click)="fireQuestAssign()" data-prefix="attach_money">Assign</button>
     </div>
 
     <div>
