@@ -60,6 +60,7 @@ class HireHero extends Command<Hero> {
   Hero execute(Engine e) {
     assert(!h.dead);
     h.hired = true;
+    e.save();
     return h;
   }
 }

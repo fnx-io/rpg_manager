@@ -3,7 +3,7 @@
     <h2>Hi!</h2>
 
     <p>This is something between technology preview and hobby project. It's a RPG manager - hire heroes, train them, send them to quests.
-    Pure RPG without actual walking! Yay!</p>
+        Pure RPG without actual walking! Yay!</p>
 
     <p>RPG manager was build with:</p>
 
@@ -16,13 +16,19 @@
         <li><a href="https://design.google.com/icons/">Material icons</a></li>
     </ul>
 
-    <p class="text--center">If you want to continue, please sign-in.</p>
+    <template [ngIf]="engine.engineState == 'noUser'">
+        <p class="text--center">If you want to continue, please sign-in.</p>
 
-    <div class="row margin--big--top">
-        <span class="s2"></span>
-        <button class="s8 btn bg--theme" (click)="loginWithGoogle()">Google+</button>
-        <span class="s2"></span>
-    </div>
+        <div class="row margin--big--top">
+            <span class="s2"></span>
+            <button class="s8 btn bg--theme" (click)="loginWithGoogle()">Google+</button>
+            <span class="s2"></span>
+        </div>
+    </template>
+
+    <template [ngIf]="engine.engineState == 'loading'">
+        <p class="text--center bg--white"><span class="preloader"></span></p>
+    </template>
 
     <p class="text--center margin--big"><img src="icons/beams-aura.svg" class="width--50" style="max-width: 10em"></p>
 

@@ -20,6 +20,7 @@ class AttemptQuest extends Command<Quest> {
     });
     q.started = e.game.currentTime;
     q.finish = q.started.add(new Duration(days: q.duration));
+    e.save();
     return q;
   }
 
@@ -190,6 +191,7 @@ class EvaluateQuestResult extends Command<QuestResult> {
     });
     e.game.questCatalogue.remove(q);
 
+    e.save();
     return questResult;
   }
 

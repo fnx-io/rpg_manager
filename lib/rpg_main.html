@@ -15,11 +15,11 @@
             </div>
         </header>
         <main>
-            <template [ngIf]="game.loggedUser != null">
+            <template [ngIf]="engine.engineState == 'ready'">
                 <router-outlet></router-outlet>
             </template>
 
-            <template [ngIf]="game.loggedUser == null">
+            <template [ngIf]="engine.engineState != 'ready'">
                 <screen-login></screen-login>
             </template>
 

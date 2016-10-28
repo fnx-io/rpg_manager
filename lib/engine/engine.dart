@@ -17,6 +17,12 @@ const Duration SCALED_TICK_DURATION = const Duration(milliseconds: TICK_MS * TIM
 const double DEFAULT_QUEST_IN_TICK_PROBABILITY = 0.02;
 const double DEFAULT_HERO_IN_TICK_PROBABILITY = 0.01;
 
+const String STATE_NO_USER = "noUser";
+const String STATE_LOADING = "loading";
+const String STATE_READY = "ready";
+
+
+
 /// This is the game engine, contains reference to the [Game] state
 /// and can execute [CommandType]s on it. Also holds Firebase reference.
 class Engine {
@@ -39,9 +45,19 @@ class Engine {
 
   Timer tickGenerator;
 
+  String _engineState;
+
+  String get engineState => _engineState;
+
+  set engineState(String value) {
+    _engineState = value;
+    log.info("Engine state: ${engineState}");
+  }
+
   Engine(this.firebase) {
     _controller = new StreamController();
     events = _controller.stream;
+    engineState = STATE_NO_USER;
 
     log.info("Waiting for Firebase user");
     firebaseAuthEvents = firebase.auth().onAuthStateChanged.listen((AuthEvent auth) {
@@ -49,6 +65,7 @@ class Engine {
         log.info("Received Firebase user ${auth.user}");
         if (game.loggedUser == null || game.loggedUser.uid != auth.user.uid) {
           log.info("Initializing game");
+          engineState = STATE_LOADING;
           profiler.profileFuture("init", initWithUser(auth.user));
         }
       } else {
@@ -71,7 +88,10 @@ class Engine {
   }
 
   Future initWithUser(User user) async {
+    engineState = STATE_LOADING;
     game = new Game();
+    game.loggedUser = user;
+
     if (tickGenerator != null) tickGenerator.cancel();
 
     database = firebase.database().ref(user.uid).child("game");
@@ -90,16 +110,14 @@ class Engine {
       for (int a = 0; a < 5; a++) {
         executeCommand(new GenerateNewQuest(g.Difficulty.AVG));
       }
-      save();
+      await save();
     } else {
       log.info("Loading game from Firebase");
       game.fromMap(data);
     }
 
-    game.loggedUser = user;
-
     tickGenerator = new Timer.periodic(new Duration(milliseconds: TICK_MS), doTick);
-
+    engineState = STATE_READY;
     return true;
   }
 
